@@ -55,36 +55,30 @@ body::before{
 /* ══════════════ HERO — the far mountain shrine ══════════════ */
 .hero{
   position:relative;
-  min-height:80vh;
-  display:flex; align-items:flex-end;
-  overflow:hidden;
+  padding:36px 22px 28px;
   text-align:center;
+  overflow:hidden;
 }
-.hero-media{
-  position:absolute; inset:0;
-  background:url('images.webp') center 58%/cover no-repeat;
-  transform:scale(1.04);
-  filter:saturate(1.04) contrast(1.02);
+/* divine glow spilling from above the altar image */
+.hero::before{
+  content:''; position:absolute; left:50%; top:-4%; transform:translateX(-50%);
+  width:130%; height:58%; pointer-events:none;
+  background:radial-gradient(ellipse 46% 62% at 50% 0%, rgba(255,236,190,.22), transparent 62%);
 }
-/* Divine light + fade so the shrine floor blends into the page */
-.hero-veil{
-  position:absolute; inset:0;
-  background:
-    radial-gradient(ellipse 55% 45% at 50% 6%, rgba(255,240,205,.28) 0%, transparent 55%),
-    linear-gradient(180deg, rgba(19,13,8,.30) 0%, transparent 22%, transparent 38%, rgba(19,13,8,.82) 74%, var(--bg) 100%);
-}
-/* slow god-rays — softened */
-.hero::after{
-  content:''; position:absolute; inset:0; pointer-events:none;
-  background:conic-gradient(from 205deg at 50% -6%,
-    transparent 0deg, rgba(255,238,200,.08) 16deg, transparent 30deg,
-    transparent 150deg, rgba(255,238,200,.06) 170deg, transparent 188deg);
-  mix-blend-mode:screen;
-  animation:rays 9s ease-in-out infinite alternate;
-}
-@keyframes rays{ from{opacity:.4} to{opacity:.7} }
+.hero-inner{ position:relative; z-index:2; }
 
-.hero-inner{ position:relative; z-index:2; width:100%; padding:0 22px 40px; }
+/* The Difunta Correa shown whole, framed like a venerated altar painting */
+.altar{ margin:0 auto 24px; max-width:460px; }
+.altar-frame{
+  position:relative; border-radius:14px; padding:7px;
+  background:linear-gradient(145deg,#2c2110 0%,#6b5326 22%,#d8bd7a 45%,#f2dfa6 52%,#b7913f 60%,#5a4520 82%,#241a0c 100%);
+  box-shadow:0 22px 60px rgba(0,0,0,.55), 0 0 70px rgba(240,173,62,.18);
+}
+.altar-frame::after{
+  content:''; position:absolute; inset:7px; border-radius:8px; pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(255,236,190,.4), inset 0 26px 44px -22px rgba(0,0,0,.45);
+}
+.altar-img{ display:block; width:100%; height:auto; border-radius:8px; }
 .kicker{
   font-family:'Cinzel',serif; font-weight:600;
   font-size:.72rem; letter-spacing:4px; text-transform:uppercase;
@@ -358,10 +352,13 @@ main{ display:block; }
 
   <!-- ══ HERO: the far mountain shrine ══ -->
   <header class="hero">
-    <div class="hero-media" role="img" aria-label="La Difunta Correa en el monte, con la luz divina"></div>
-    <div class="hero-veil"></div>
     <div class="hero-inner">
       <div class="kicker">Santuario · Mundial 2026</div>
+      <figure class="altar">
+        <div class="altar-frame">
+          <img class="altar-img" src="images.webp" alt="La Difunta Correa en el monte, con la luz divina" width="723" height="424">
+        </div>
+      </figure>
       <h1 class="shrine-title">El Santuario</h1>
       <p class="shrine-sub">Argentina 🇦🇷 vs Inglaterra 🏴‍☠️ · encomendá a la Selección</p>
       <div class="hero-countdown">
