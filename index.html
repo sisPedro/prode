@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Prode · Argentina vs England</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:#07090f;
+  color:#fff;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 15% 0%,rgba(116,172,223,.18) 0%,transparent 70%),
+    radial-gradient(ellipse 60% 40% at 85% 100%,rgba(116,172,223,.12) 0%,transparent 70%);
+  pointer-events:none;
+  z-index:0;
+}
+
+.wrap{
+  position:relative;
+  z-index:1;
+  max-width:680px;
+  margin:0 auto;
+  padding:0 16px 60px;
+}
+
+/* ── HEADER ── */
+.header{ text-align:center; padding:32px 0 8px; }
+.sun{
+  font-size:46px; display:block; margin-bottom:8px;
+  animation:sun-pulse 4s ease-in-out infinite;
+  filter:drop-shadow(0 0 18px rgba(255,215,0,.7));
+}
+@keyframes sun-pulse{
+  0%,100%{transform:rotate(-5deg) scale(1);filter:drop-shadow(0 0 18px rgba(255,215,0,.7))}
+  50%{transform:rotate(5deg) scale(1.08);filter:drop-shadow(0 0 32px rgba(255,215,0,1))}
+}
+.title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2rem,7vw,3rem);
+  letter-spacing:4px; line-height:1;
+  background:linear-gradient(135deg,#74acdf 0%,#ffffff 45%,#74acdf 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.subtitle{
+  font-size:.75em; letter-spacing:5px; text-transform:uppercase;
+  color:rgba(255,255,255,.38); margin-top:6px;
+}
+.stripe{ display:flex; height:3px; border-radius:3px; overflow:hidden; margin:20px 0 24px; gap:2px; }
+.stripe-blue{flex:1;background:#74acdf}
+.stripe-white{flex:1;background:rgba(255,255,255,.9)}
+
+/* ── COUNTDOWN ── */
+.countdown-card{
+  text-align:center;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(116,172,223,.22);
+  border-radius:22px;
+  padding:22px 18px 24px;
+  margin-bottom:14px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.cd-label{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.1em; letter-spacing:4px;
+  color:rgba(255,255,255,.45); margin-bottom:14px;
+}
+.cd-clock{ display:flex; justify-content:center; gap:14px; }
+.cd-unit{ display:flex; flex-direction:column; align-items:center; min-width:56px; }
+.cd-num{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(2.2rem,10vw,3rem); line-height:1;
+  color:#74acdf; font-variant-numeric:tabular-nums;
+}
+.cd-unit-label{
+  font-size:.62em; letter-spacing:2px; text-transform:uppercase;
+  color:rgba(255,255,255,.3); margin-top:6px;
+}
+.cd-live{
+  font-family:'Bebas Neue',sans-serif; letter-spacing:4px;
+  font-size:2rem; color:#ff5f57; animation:blink .9s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
+.cd-kickoff{ font-size:.78em; color:rgba(255,255,255,.35); margin-top:16px; }
+
+/* ── MATCH TITLE ── */
+.match-title{
+  text-align:center;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(1.4rem,6vw,2rem); letter-spacing:2px;
+  margin:0 0 22px; line-height:1.15;
+}
+.match-title .vs{ font-size:.7em; color:rgba(255,255,255,.35);
+  font-family:'Inter';font-weight:800;letter-spacing:1px; }
+
+/* ── SECTION ── */
+.section-title{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:1.1em; letter-spacing:4px;
+  color:rgba(255,255,255,.32); margin:0 0 12px 4px;
+}
+
+/* ── PREDICTION LIST ── */
+.pred-list{ display:flex; flex-direction:column; gap:8px; margin-bottom:30px; }
+.pred-item{
+  display:flex; align-items:center; gap:12px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:14px; padding:12px 14px;
+  transition:border-color .3s,background .3s;
+}
+.pred-item.revealed{
+  border-color:rgba(116,172,223,.35);
+  background:rgba(116,172,223,.07);
+}
+.pi-avatar{
+  width:38px;height:38px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:.8em;color:#fff;
+}
+.pi-main{ flex:1; min-width:0; }
+.pi-nick{
+  font-weight:600; font-size:.95em; color:rgba(255,255,255,.92);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.pi-code{
+  font-size:.7em; letter-spacing:1px;
+  color:rgba(255,255,255,.35); font-family:ui-monospace,Menlo,monospace;
+  margin-top:2px;
+}
+.pi-right{ flex-shrink:0; text-align:right; }
+.pi-score{
+  font-family:'Bebas Neue',sans-serif; font-size:1.5em; letter-spacing:2px;
+  color:#74acdf;
+}
+.pi-hidden{ font-size:1.2em; color:rgba(255,255,255,.28); letter-spacing:2px; }
+.pi-verified{
+  display:block; font-size:.6em; letter-spacing:1px;
+  color:#34c759; margin-top:1px; text-transform:uppercase;
+}
+.reveal-btn{
+  background:rgba(116,172,223,.14);
+  border:1px solid rgba(116,172,223,.3);
+  color:#74acdf; font-weight:600; font-size:.75em;
+  padding:7px 12px; border-radius:9px; cursor:pointer;
+  transition:background .2s;
+}
+.reveal-btn:hover{ background:rgba(116,172,223,.26); }
+.empty-note{
+  text-align:center; color:rgba(255,255,255,.25);
+  font-style:italic; font-size:.85em; padding:18px 0;
+}
+
+/* ── FORM ── */
+.form-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(116,172,223,.2);
+  border-radius:20px; padding:20px 18px 22px;
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.field{ margin-bottom:14px; }
+.field label{
+  display:block; font-size:.72em; letter-spacing:1px; text-transform:uppercase;
+  color:rgba(255,255,255,.4); margin-bottom:6px;
+}
+.field input{
+  width:100%; background:rgba(0,0,0,.3);
+  border:1px solid rgba(255,255,255,.1); border-radius:11px;
+  color:#fff; font-size:1em; font-family:inherit; padding:12px 14px;
+  transition:border-color .2s;
+}
+.field input:focus{ outline:none; border-color:rgba(116,172,223,.55); }
+.score-row{ display:flex; align-items:flex-end; gap:12px; }
+.score-team{ flex:1; text-align:center; }
+.score-team .team-name{
+  font-family:'Bebas Neue',sans-serif; font-size:1.15em; letter-spacing:1px;
+  color:rgba(255,255,255,.7); margin-bottom:6px;
+}
+.score-team input{ text-align:center; font-size:1.6em; font-family:'Bebas Neue',sans-serif; padding:8px; }
+.score-sep{ font-family:'Bebas Neue',sans-serif; font-size:1.6em; color:rgba(255,255,255,.3); padding-bottom:10px; }
+.hint{ font-size:.72em; color:rgba(255,255,255,.32); margin-top:5px; line-height:1.4; }
+.submit-btn{
+  width:100%; margin-top:6px;
+  background:linear-gradient(135deg,#74acdf,#5a8fc0);
+  border:none; border-radius:12px; color:#07090f;
+  font-weight:800; font-size:1em; letter-spacing:.5px;
+  padding:14px; cursor:pointer; transition:transform .12s,opacity .2s;
+}
+.submit-btn:hover{ transform:translateY(-1px); }
+.submit-btn:disabled{ opacity:.5; cursor:not-allowed; transform:none; }
+
+/* ── BANNER / TOAST ── */
+.banner{
+  background:rgba(255,59,48,.14); border:1px solid rgba(255,59,48,.4);
+  color:#ff9d97; border-radius:12px; padding:12px 14px;
+  font-size:.82em; margin-bottom:16px; line-height:1.5;
+}
+.toast{
+  position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(80px);
+  background:rgba(20,24,34,.96); border:1px solid rgba(116,172,223,.4);
+  color:#fff; padding:12px 18px; border-radius:12px; font-size:.85em;
+  z-index:50; opacity:0; transition:transform .3s,opacity .3s;
+  box-shadow:0 12px 40px rgba(0,0,0,.5); max-width:90vw;
+}
+.toast.show{ transform:translateX(-50%) translateY(0); opacity:1; }
+.toast.err{ border-color:rgba(255,59,48,.5); }
+
+.footer{
+  text-align:center; color:rgba(255,255,255,.18);
+  font-size:.72em; letter-spacing:1px; margin-top:34px; line-height:1.6;
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <span class="sun">☀️</span>
+    <div class="title">PRODE FMV</div>
+    <div class="subtitle">Predicciones · commit &amp; reveal</div>
+    <div class="stripe"><div class="stripe-blue"></div><div class="stripe-white"></div><div class="stripe-blue"></div></div>
+  </div>
+
+  <div id="config-banner"></div>
+
+  <!-- COUNTDOWN -->
+  <div class="countdown-card">
+    <div class="cd-label">TIME FOR THE MATCH</div>
+    <div id="clock" class="cd-clock"></div>
+    <div id="kickoff-line" class="cd-kickoff"></div>
+  </div>
+
+  <div class="match-title">🇦🇷 ARGENTINA <span class="vs">vs</span> ENGLAND 🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
+
+  <!-- PREDICTION LIST -->
+  <div class="section-title">PRONÓSTICOS</div>
+  <div id="pred-list" class="pred-list">
+    <div class="empty-note">Cargando…</div>
+  </div>
+
+  <!-- FORM -->
+  <div class="section-title">DEJÁ TU PRONÓSTICO</div>
+  <div class="form-card">
+    <div class="field">
+      <label for="nickname">Apodo</label>
+      <input id="nickname" type="text" maxlength="24" placeholder="Tu apodo" autocomplete="off">
+    </div>
+
+    <div class="field">
+      <label>Resultado</label>
+      <div class="score-row">
+        <div class="score-team">
+          <div class="team-name">🇦🇷 ARG</div>
+          <input id="score-arg" type="number" min="0" max="99" inputmode="numeric" placeholder="0">
+        </div>
+        <div class="score-sep">–</div>
+        <div class="score-team">
+          <div class="team-name">ENG 🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
+          <input id="score-eng" type="number" min="0" max="99" inputmode="numeric" placeholder="0">
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="pin">PIN secreto</label>
+      <input id="pin" type="password" maxlength="40" placeholder="Ej: 1234 o una frase" autocomplete="off">
+      <div class="hint">Tu pronóstico se cifra con este PIN y queda oculto. Guardalo bien: lo necesitás para revelar. Cuando reveles, el PIN se publica para que todos puedan verificar que no lo cambiaste.</div>
+    </div>
+
+    <button id="submit-btn" class="submit-btn">🔒 Enviar pronóstico cifrado</button>
+  </div>
+
+  <div class="footer">
+    Cifrado en tu navegador (AES-GCM · PBKDF2). El servidor sólo guarda datos cifrados.<br>
+    Nadie puede ver tu pronóstico hasta que vos lo reveles. 🇦🇷
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<!-- Supabase as a classic UMD bundle (exposes window.supabase). Classic script,
+     not an ES module, so it survives htmlpreview's script re-injection. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ═══════════════════ CONFIG — EDIT THESE ═══════════════════ */
+const SUPABASE_URL      = 'https://zliyqzvmlwnhdxdxruhw.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_D2nxB0zwtBRAbE67LP8w7w_W_Rdh1Rr'; // publishable (public-safe) key
+const KICKOFF_UTC = '2026-07-15T19:00:00Z';   // TODO: set the real kickoff, UTC
+/* ═══════════════════════════════════════════════════════════ */
+
+const configured = SUPABASE_URL.startsWith('http') && !SUPABASE_ANON_KEY.startsWith('__');
+let sb = null; // created in init() once the UMD bundle has loaded
+
+/* ── UI helpers ── */
+const $ = id => document.getElementById(id);
+function toast(msg, isErr){
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr ? ' err' : '');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { t.className = 'toast'; }, 3400);
+}
+
+/* ── Crypto (commit-reveal) ── */
+const enc = new TextEncoder();
+const dec = new TextDecoder();
+const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+
+async function deriveKey(pin, salt){
+  const base = await crypto.subtle.importKey('raw', enc.encode(pin), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name:'PBKDF2', salt, iterations:100000, hash:'SHA-256' },
+    base, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']
+  );
+}
+
+async function encryptPrediction(scoreObj, pin){
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv   = crypto.getRandomValues(new Uint8Array(12));
+  const key  = await deriveKey(pin, salt);
+  const ct   = await crypto.subtle.encrypt({ name:'AES-GCM', iv }, key, enc.encode(JSON.stringify(scoreObj)));
+  return { ciphertext:b64(ct), salt:b64(salt), iv:b64(iv) };
+}
+
+async function decryptPrediction(row, pin){
+  const key = await deriveKey(pin, unb64(row.salt));
+  const pt  = await crypto.subtle.decrypt({ name:'AES-GCM', iv:unb64(row.iv) }, key, unb64(row.ciphertext));
+  return JSON.parse(dec.decode(pt)); // throws if PIN wrong (auth tag fails)
+}
+
+// Public code: tamper-evident fingerprint of the sealed commitment.
+async function publicCode(nickname, ciphertext){
+  const h = await crypto.subtle.digest('SHA-256', enc.encode(nickname + '|' + ciphertext));
+  const hex = [...new Uint8Array(h)].map(b => b.toString(16).padStart(2,'0')).join('').toUpperCase();
+  return hex.slice(0,4) + '-' + hex.slice(4,8);
+}
+
+/* ── Avatar color from nickname ── */
+function avatarColor(name){
+  let h = 0;
+  for (const c of name) h = (h*31 + c.charCodeAt(0)) % 360;
+  return `hsl(${h} 45% 42%)`;
+}
+function initials(name){
+  const parts = name.trim().split(/\s+/);
+  return ((parts[0]?.[0]||'') + (parts[1]?.[0]||'')).toUpperCase() || '?';
+}
+
+/* ── Countdown ── */
+const kickoffMs = new Date(KICKOFF_UTC).getTime();
+$('kickoff-line').textContent = '⏰ ' + new Date(KICKOFF_UTC).toLocaleString('es-AR', {
+  timeZone:'America/Argentina/Buenos_Aires', weekday:'long', day:'numeric', month:'long',
+  hour:'2-digit', minute:'2-digit'
+}) + ' (hora Argentina)';
+
+function pad(n){ return String(n).padStart(2,'0'); }
+function renderClock(){
+  const diff = kickoffMs - Date.now();
+  const clk = $('clock');
+  if (diff <= 0){
+    clk.innerHTML = '<div class="cd-live">🔴 ¡ES HORA DEL PARTIDO!</div>';
+    return;
+  }
+  const d = Math.floor(diff/864e5);
+  const h = Math.floor(diff%864e5/36e5);
+  const m = Math.floor(diff%36e5/6e4);
+  const s = Math.floor(diff%6e4/1e3);
+  const units = [['DÍAS',d],['HS',h],['MIN',m],['SEG',s]];
+  clk.innerHTML = units.map(([lbl,v]) =>
+    `<div class="cd-unit"><span class="cd-num">${pad(v)}</span><span class="cd-unit-label">${lbl}</span></div>`
+  ).join('');
+}
+renderClock();
+setInterval(renderClock, 1000);
+
+/* ── Render prediction list ── */
+let rows = [];
+async function renderList(){
+  const list = $('pred-list');
+  if (rows.length === 0){
+    list.innerHTML = '<div class="empty-note">Todavía no hay pronósticos. ¡Sé el primero! 🎯</div>';
+    return;
+  }
+  const html = [];
+  for (const r of rows){
+    let right;
+    if (r.revealed && r.reveal_pin){
+      try {
+        const score = await decryptPrediction(r, r.reveal_pin);
+        right = `<div class="pi-score">${score.arg} – ${score.eng}</div><span class="pi-verified">✓ verificado</span>`;
+      } catch {
+        right = `<div class="pi-score" style="color:#ff5f57">—</div><span class="pi-verified" style="color:#ff5f57">no verifica</span>`;
+      }
+    } else {
+      right = `<div class="pi-hidden">🔒 ? – ?</div>
+        <button class="reveal-btn" data-id="${r.id}">Revelar</button>`;
+    }
+    html.push(`<div class="pred-item${r.revealed?' revealed':''}">
+      <div class="pi-avatar" style="background:${avatarColor(r.nickname)}">${initials(r.nickname)}</div>
+      <div class="pi-main">
+        <div class="pi-nick">${escapeHtml(r.nickname)}</div>
+        <div class="pi-code">${r.public_code}</div>
+      </div>
+      <div class="pi-right">${right}</div>
+    </div>`);
+  }
+  list.innerHTML = html.join('');
+  list.querySelectorAll('.reveal-btn').forEach(b =>
+    b.addEventListener('click', () => reveal(b.dataset.id)));
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ── Load from backend ── */
+async function load(){
+  if (!sb) return;
+  const { data, error } = await sb.from('predictions').select('*').order('created_at', { ascending:true });
+  if (error){ toast('Error al cargar: ' + error.message, true); return; }
+  rows = data || [];
+  await renderList();
+}
+
+/* ── Submit ── */
+async function submit(){
+  if (!sb){ toast('Backend no configurado (ver SUPABASE_URL)', true); return; }
+  const nickname = $('nickname').value.trim();
+  const arg = $('score-arg').value;
+  const eng = $('score-eng').value;
+  const pin = $('pin').value;
+
+  if (!nickname){ toast('Ingresá un apodo', true); return; }
+  if (arg === '' || eng === ''){ toast('Completá ambos resultados', true); return; }
+  if (Number(arg) < 0 || Number(eng) < 0){ toast('Los goles no pueden ser negativos', true); return; }
+  if (pin.length < 3){ toast('El PIN debe tener al menos 3 caracteres', true); return; }
+
+  const btn = $('submit-btn');
+  btn.disabled = true; btn.textContent = 'Cifrando…';
+  try {
+    const sealed = await encryptPrediction({ arg:Number(arg), eng:Number(eng) }, pin);
+    const code = await publicCode(nickname, sealed.ciphertext);
+    const { error } = await sb.from('predictions').insert({
+      nickname,
+      public_code: code,
+      ciphertext: sealed.ciphertext,
+      salt: sealed.salt,
+      iv: sealed.iv,
+      revealed: false,
+    });
+    if (error) throw error;
+    toast('🔒 Pronóstico cifrado y enviado. Código: ' + code);
+    $('nickname').value=''; $('score-arg').value=''; $('score-eng').value=''; $('pin').value='';
+    await load();
+  } catch(e){
+    toast('Error: ' + (e.message||e), true);
+  } finally {
+    btn.disabled = false; btn.textContent = '🔒 Enviar pronóstico cifrado';
+  }
+}
+
+/* ── Reveal ── */
+async function reveal(id){
+  const row = rows.find(r => String(r.id) === String(id));
+  if (!row) return;
+  const pin = prompt(`Revelar el pronóstico de "${row.nickname}".\nIngresá el PIN secreto (se publicará para que todos verifiquen):`);
+  if (pin === null) return;
+  let score;
+  try {
+    score = await decryptPrediction(row, pin);
+  } catch {
+    toast('PIN incorrecto — no se pudo descifrar', true);
+    return;
+  }
+  if (!confirm(`Descifrado OK: 🇦🇷 ${score.arg} – ${score.eng} 🏴\n\n¿Revelar para todos? Esto es definitivo.`)) return;
+  const { error } = await sb.from('predictions').update({ revealed:true, reveal_pin:pin }).eq('id', row.id);
+  if (error){ toast('Error al revelar: ' + error.message, true); return; }
+  toast('✨ Pronóstico revelado y verificado');
+  await load();
+}
+
+/* ── Wire up ── */
+$('submit-btn').addEventListener('click', submit);
+
+if (!configured){
+  $('config-banner').innerHTML =
+    '<div class="banner"><b>⚠️ Backend sin configurar.</b> Editá <code>SUPABASE_URL</code> y ' +
+    '<code>SUPABASE_ANON_KEY</code> en el <code>&lt;script&gt;</code> de este archivo antes de usarlo.</div>';
+  $('pred-list').innerHTML = '<div class="empty-note">Configurá Supabase para ver los pronósticos.</div>';
+} else {
+  // Wait for the UMD bundle to define window.supabase (load order isn't
+  // guaranteed under htmlpreview's script re-injection), then create the
+  // client and start polling.
+  (function init(tries){
+    if (!(window.supabase && window.supabase.createClient)){
+      if (tries > 200){ // ~10s
+        $('pred-list').innerHTML = '<div class="empty-note">No se pudo cargar Supabase (revisá tu conexión).</div>';
+        return;
+      }
+      return setTimeout(() => init(tries + 1), 50);
+    }
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    load();
+    setInterval(load, 15000); // poll for others' submissions/reveals
+  })(0);
+}
+</script>
+</body>
+</html>
