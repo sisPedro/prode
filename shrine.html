@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El Santuario · Argentina vs Inglaterra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --bg:#130d08;
+  --bg2:#1d1409;
+  --parch:#efe6d4;                     /* primary text — warm parchment */
+  --parch-soft:rgba(239,230,212,.74);  /* secondary */
+  --parch-dim:rgba(239,230,212,.55);   /* helper — meets 4.5:1 on --bg */
+  --candle:#f0ad3e;                     /* candle flame amber */
+  --candle-soft:#f4c471;
+  --gold:#d9b978;                       /* gilt / halo */
+  --gold-border:rgba(217,185,120,.22);
+  --terra:#c85a38;                      /* clay / her mantle */
+  --terra-soft:#dc7a54;
+  --sky:#8fb6d6;                        /* the celestial blue */
+  --card:rgba(239,230,212,.045);
+  --card-2:rgba(239,230,212,.07);
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:18px;
+  background:var(--bg);
+  color:var(--parch);
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.5;
+}
+
+/* Warm shrine ambience — candle glows + deep vignette */
+body::before{
+  content:'';
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(240,173,62,.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 12% 88%, rgba(200,90,56,.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 88% 96%, rgba(217,185,120,.07) 0%, transparent 60%),
+    radial-gradient(circle at 50% 120%, transparent 60%, rgba(0,0,0,.5) 100%);
+}
+
+.wrap{ position:relative; z-index:1; max-width:640px; margin:0 auto; }
+
+/* ══════════════ HERO — the far mountain shrine ══════════════ */
+.hero{
+  position:relative;
+  min-height:80vh;
+  display:flex; align-items:flex-end;
+  overflow:hidden;
+  text-align:center;
+}
+.hero-media{
+  position:absolute; inset:0;
+  background:url('images.webp') center 58%/cover no-repeat;
+  transform:scale(1.04);
+  filter:saturate(1.04) contrast(1.02);
+}
+/* Divine light + fade so the shrine floor blends into the page */
+.hero-veil{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(ellipse 55% 45% at 50% 6%, rgba(255,240,205,.28) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(19,13,8,.30) 0%, transparent 22%, transparent 38%, rgba(19,13,8,.82) 74%, var(--bg) 100%);
+}
+/* slow god-rays — softened */
+.hero::after{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background:conic-gradient(from 205deg at 50% -6%,
+    transparent 0deg, rgba(255,238,200,.08) 16deg, transparent 30deg,
+    transparent 150deg, rgba(255,238,200,.06) 170deg, transparent 188deg);
+  mix-blend-mode:screen;
+  animation:rays 9s ease-in-out infinite alternate;
+}
+@keyframes rays{ from{opacity:.4} to{opacity:.7} }
+
+.hero-inner{ position:relative; z-index:2; width:100%; padding:0 22px 40px; }
+.kicker{
+  font-family:'Cinzel',serif; font-weight:600;
+  font-size:.72rem; letter-spacing:4px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:12px;
+  text-shadow:0 1px 12px rgba(0,0,0,.7);
+}
+.shrine-title{
+  font-family:'Cinzel',serif; font-weight:800;
+  font-size:clamp(2.6rem,13vw,4.4rem); line-height:.98; letter-spacing:2px;
+  color:#fbf3e2;
+  text-shadow:0 2px 30px rgba(0,0,0,.65), 0 0 60px rgba(240,173,62,.25);
+}
+.shrine-sub{
+  font-size:1.06rem; font-style:italic; color:var(--parch-soft);
+  margin:12px 0 22px; text-shadow:0 1px 10px rgba(0,0,0,.7);
+}
+.hero-countdown{ display:flex; align-items:baseline; justify-content:center; gap:10px; }
+.hc-label{
+  font-family:'Cinzel',serif; font-size:.7rem; letter-spacing:3px;
+  text-transform:uppercase; color:var(--parch-dim);
+}
+.hc-clock .cd-clock, #clock.cd-clock{ display:inline-flex; }
+.cd-clock{ display:flex; justify-content:center; gap:12px; }
+.cd-unit{ display:flex; flex-direction:column; align-items:center; min-width:44px; }
+.cd-num{
+  font-family:'Cinzel',serif; font-weight:700;
+  font-size:clamp(1.6rem,7vw,2.2rem); line-height:1; color:var(--candle-soft);
+  text-shadow:0 0 20px rgba(240,173,62,.35);
+}
+.cd-unit-label{
+  font-size:.6rem; letter-spacing:2px; text-transform:uppercase;
+  color:var(--parch-dim); margin-top:5px; font-family:'Cinzel',serif;
+}
+.cd-live{
+  font-family:'Cinzel',serif; font-weight:700; letter-spacing:2px;
+  font-size:1.5rem; color:var(--terra-soft);
+  animation:flicker 1.2s ease-in-out infinite;
+}
+@keyframes flicker{0%,100%{opacity:1}45%{opacity:.6}}
+.hc-kickoff{ font-size:.92rem; font-style:italic; color:var(--parch-dim); margin-top:14px; }
+.scroll-cue{
+  margin-top:26px; font-family:'Cinzel',serif; font-size:.66rem; letter-spacing:3px;
+  text-transform:uppercase; color:var(--parch-dim);
+  animation:breathe 2.6s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{opacity:.5;transform:translateY(0)}50%{opacity:1;transform:translateY(4px)}}
+
+/* ══════════════ BANNER ══════════════ */
+#config-banner{ padding:0 20px; }
+.banner{
+  background:rgba(200,90,56,.14); border:1px solid rgba(200,90,56,.4);
+  color:#f0c0ad; border-radius:12px; padding:12px 14px;
+  font-size:.92em; margin:16px 0 0; line-height:1.5;
+}
+
+/* ══════════════ SHRINE BODY (rezos — the main act) ══════════════ */
+main{ display:block; }
+.shrine-body{ padding:8px 20px 10px; text-align:center; }
+.candles{ font-size:1.5rem; letter-spacing:14px; opacity:.9; margin:6px 0 14px; padding-left:14px;
+  filter:drop-shadow(0 0 10px rgba(240,173,62,.5)); animation:flicker 3s ease-in-out infinite; }
+.section-title{
+  font-family:'Cinzel',serif; font-weight:700;
+  font-size:1.5rem; letter-spacing:2px; color:#f7ecd6;
+}
+.section-title.small{ font-size:1.15rem; opacity:.9; }
+.rezo-intro{
+  font-size:1.02rem; font-style:italic; color:var(--parch-soft);
+  max-width:30rem; margin:8px auto 22px; line-height:1.5;
+}
+.offerings-title{
+  font-family:'Cinzel',serif; font-size:.74rem; letter-spacing:3px; text-transform:uppercase;
+  color:var(--gold); margin:30px 0 14px; text-align:center;
+  position:relative;
+}
+.offerings-title::before,.offerings-title::after{
+  content:''; position:absolute; top:50%; width:22%; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold-border));
+}
+.offerings-title::before{ left:6%; transform:scaleX(-1); }
+.offerings-title::after{ right:6%; }
+
+/* ══════════════ CARDS / FORMS (votive offering) ══════════════ */
+.form-card{
+  text-align:left;
+  background:var(--card);
+  border:1px solid var(--gold-border);
+  border-radius:16px; padding:22px 20px 24px;
+  box-shadow:inset 0 1px 0 rgba(255,240,205,.05), 0 10px 40px rgba(0,0,0,.3);
+}
+.form-card.offering{
+  background:linear-gradient(180deg, rgba(240,173,62,.06), rgba(239,230,212,.03));
+  border-color:rgba(217,185,120,.3);
+}
+.field{ margin-bottom:16px; }
+.field label{
+  display:block; font-family:'Cinzel',serif; font-weight:600;
+  font-size:.7rem; letter-spacing:2px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:7px;
+}
+.opt{ color:var(--parch-dim); font-weight:400; text-transform:none; letter-spacing:0; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1em; }
+.field input, .form-card textarea{
+  width:100%; background:rgba(10,7,4,.4);
+  border:1px solid rgba(217,185,120,.18); border-radius:10px;
+  color:var(--parch); font-size:1.05rem; font-family:'Cormorant Garamond',serif; padding:11px 14px;
+  transition:border-color .2s, box-shadow .2s;
+}
+.form-card textarea{ resize:vertical; min-height:84px; line-height:1.45; }
+.field input:focus, .form-card textarea:focus{
+  outline:none; border-color:var(--candle);
+  box-shadow:0 0 0 3px rgba(240,173,62,.12);
+}
+.field input::placeholder, .form-card textarea::placeholder{ color:rgba(239,230,212,.32); font-style:italic; }
+
+.score-row{ display:flex; align-items:flex-end; gap:12px; }
+.score-team{ flex:1; text-align:center; }
+.score-team .team-name{ font-family:'Cinzel',serif; font-size:.9rem; letter-spacing:1px; color:var(--parch-soft); margin-bottom:6px; }
+.score-team input{ text-align:center; font-size:1.7rem; font-family:'Cinzel',serif; padding:8px; -moz-appearance:textfield; appearance:textfield; }
+.score-team input::-webkit-outer-spin-button,
+.score-team input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+.score-sep{ font-family:'Cinzel',serif; font-size:1.7rem; color:var(--parch-dim); padding-bottom:8px; }
+.hint{ font-size:.92rem; font-style:italic; color:var(--parch-dim); margin-top:6px; line-height:1.45; }
+
+/* Saint choice — altar plaques */
+.saint-pills{ display:flex; flex-direction:column; gap:8px; }
+.saint-pill{
+  width:100%; text-align:left;
+  background:rgba(10,7,4,.35); border:1px solid rgba(217,185,120,.16);
+  color:var(--parch-soft); font-family:'Cinzel',serif; font-weight:600;
+  font-size:.92rem; letter-spacing:1px; padding:13px 16px; border-radius:11px;
+  cursor:pointer; transition:all .2s;
+}
+.saint-pill:hover{ border-color:rgba(240,173,62,.45); color:var(--parch); }
+.saint-pill.active{
+  background:linear-gradient(180deg, rgba(240,173,62,.2), rgba(200,90,56,.12));
+  border-color:var(--candle); color:#fbf3e2;
+  box-shadow:0 0 22px rgba(240,173,62,.2);
+}
+
+.submit-btn{
+  width:100%; margin-top:8px;
+  background:linear-gradient(180deg, var(--candle), #cf7f2a);
+  border:1px solid rgba(255,220,150,.5); border-radius:12px; color:#2a1806;
+  font-family:'Cinzel',serif; font-weight:700; font-size:1rem; letter-spacing:1px;
+  padding:15px; cursor:pointer; transition:transform .12s, box-shadow .2s;
+  box-shadow:0 6px 24px rgba(240,173,62,.22);
+}
+.submit-btn:hover{ transform:translateY(-1px); box-shadow:0 10px 30px rgba(240,173,62,.34); }
+.submit-btn:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
+
+/* ══════════════ REZO LIST — ofrendas ══════════════ */
+.rezo-list{ display:flex; flex-direction:column; gap:12px; margin-bottom:10px; text-align:left; }
+.rezo-item{
+  position:relative;
+  background:linear-gradient(180deg, rgba(239,230,212,.06), rgba(239,230,212,.03));
+  border:1px solid var(--gold-border); border-left:3px solid rgba(240,173,62,.5);
+  border-radius:12px; padding:14px 16px;
+  box-shadow:0 6px 22px rgba(0,0,0,.22);
+}
+.rezo-top{ display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
+.rezo-nick{ font-family:'Cinzel',serif; font-weight:600; font-size:.9rem; letter-spacing:.5px; color:#f7ecd6; }
+.rezo-saint{
+  font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:1px; text-transform:uppercase;
+  color:var(--candle-soft); background:rgba(240,173,62,.12);
+  border:1px solid rgba(240,173,62,.3); padding:3px 9px; border-radius:99px; white-space:nowrap;
+}
+.rezo-msg{ font-size:1.12rem; font-style:italic; color:var(--parch); line-height:1.45; white-space:pre-wrap; word-break:break-word; }
+.empty-note{ text-align:center; color:var(--parch-dim); font-style:italic; font-size:1.02rem; padding:20px 0; }
+
+/* ══════════════ PRODE — humble secondary toggle ══════════════ */
+.prode-toggle{
+  margin:34px 20px 0;
+  background:rgba(10,7,4,.3); border:1px solid rgba(217,185,120,.14);
+  border-radius:14px; overflow:hidden;
+}
+.prode-toggle summary{
+  list-style:none; cursor:pointer; display:flex; align-items:center; gap:12px;
+  padding:16px 18px; font-family:'Cormorant Garamond',serif;
+}
+.prode-toggle summary::-webkit-details-marker{ display:none; }
+.pt-icon{ font-size:1.3rem; opacity:.85; }
+.pt-text{ flex:1; font-size:1.04rem; color:var(--parch-soft); }
+.pt-text strong{ color:var(--parch); font-weight:600; }
+.pt-caret{ color:var(--gold); transition:transform .25s; font-size:.9rem; }
+.prode-toggle[open] .pt-caret{ transform:rotate(180deg); }
+.prode-inner{ padding:4px 18px 22px; border-top:1px solid rgba(217,185,120,.12); text-align:center; }
+.prode-inner .section-title{ margin:16px 0 12px; }
+.prode-inner .form-card{ margin-top:18px; }
+
+/* prediction rows (rendered by JS) — muted, secondary */
+.pred-list{ display:flex; flex-direction:column; gap:8px; text-align:left; }
+.pred-item{
+  display:flex; align-items:center; gap:12px;
+  background:var(--card); border:1px solid rgba(217,185,120,.12);
+  border-radius:11px; padding:11px 13px; transition:border-color .3s, background .3s;
+}
+.pred-item.revealed{ border-color:rgba(240,173,62,.4); background:rgba(240,173,62,.06); }
+.pi-avatar{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cinzel',serif; font-weight:700;font-size:.8rem;color:#2a1806;
+}
+.pi-main{ flex:1; min-width:0; }
+.pi-nick{ font-family:'Cinzel',serif; font-weight:600; font-size:.9rem; color:var(--parch); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pi-code{ font-size:.72rem; letter-spacing:1px; color:var(--parch-dim); font-family:ui-monospace,Menlo,monospace; margin-top:2px; }
+.pi-right{ flex-shrink:0; text-align:right; }
+.pi-score{ font-family:'Cinzel',serif; font-weight:700; font-size:1.35rem; letter-spacing:1px; color:var(--candle-soft); }
+.pi-hidden{ font-size:1.15rem; color:var(--parch-dim); letter-spacing:2px; }
+.pi-verified{ display:block; font-size:.58rem; letter-spacing:1px; color:#7fb98a; margin-top:1px; text-transform:uppercase; font-family:'Cinzel',serif; }
+.reveal-btn{
+  background:rgba(240,173,62,.12); border:1px solid rgba(240,173,62,.34);
+  color:var(--candle-soft); font-family:'Cinzel',serif; font-weight:600; font-size:.72rem; letter-spacing:.5px;
+  padding:7px 13px; border-radius:9px; cursor:pointer; transition:background .2s;
+}
+.reveal-btn:hover{ background:rgba(240,173,62,.24); }
+
+/* ══════════════ REVEAL MODAL (restyled) ══════════════ */
+.modal-overlay{
+  position:fixed; inset:0; z-index:70;
+  display:flex; align-items:center; justify-content:center; padding:20px;
+  background:rgba(10,6,3,.78); backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px);
+}
+.modal-overlay[hidden]{ display:none; }
+.modal{
+  width:100%; max-width:380px;
+  background:linear-gradient(180deg,#1f1509,#160f07);
+  border:1px solid var(--gold-border); border-radius:18px; padding:24px;
+  box-shadow:0 24px 70px rgba(0,0,0,.65), 0 0 60px rgba(240,173,62,.08);
+}
+.modal-title{ font-family:'Cinzel',serif; font-weight:700; font-size:1.4rem; letter-spacing:1px; color:#f7ecd6; }
+.modal-sub{ font-size:1.02rem; font-style:italic; color:var(--parch-dim); margin:5px 0 16px; }
+.modal input{
+  width:100%; background:rgba(10,7,4,.5); border:1px solid rgba(217,185,120,.2);
+  border-radius:10px; color:var(--parch); font-size:1.05rem; font-family:'Cormorant Garamond',serif; padding:12px 14px;
+}
+.modal input:focus{ outline:none; border-color:var(--candle); }
+.modal-err{ color:var(--terra-soft); font-size:.95rem; font-style:italic; margin-top:8px; }
+.modal-score{ font-family:'Cinzel',serif; font-weight:700; font-size:2.2rem; letter-spacing:2px; color:var(--candle-soft); text-align:center; padding:8px 0 10px; text-shadow:0 0 24px rgba(240,173,62,.3); }
+.modal-note{ font-size:.96rem; font-style:italic; color:var(--parch-dim); line-height:1.45; }
+.modal-actions{ display:flex; gap:10px; margin-top:20px; }
+.modal-btn{ flex:1; padding:13px; border-radius:11px; font-family:'Cinzel',serif; font-weight:700; font-size:.82rem; letter-spacing:1px; cursor:pointer; border:none; transition:transform .1s; }
+.modal-btn:hover{ transform:translateY(-1px); }
+.modal-btn:disabled{ opacity:.5; cursor:not-allowed; transform:none; }
+.modal-btn.ghost{ background:rgba(239,230,212,.06); color:var(--parch-soft); border:1px solid rgba(217,185,120,.2); }
+.modal-btn.primary{ background:linear-gradient(180deg,var(--candle),#cf7f2a); color:#2a1806; }
+
+/* ══════════════ TOAST ══════════════ */
+.toast{
+  position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(80px);
+  background:linear-gradient(180deg,#241809,#180f07); border:1px solid var(--gold-border);
+  color:var(--parch); padding:13px 20px; border-radius:12px; font-size:1.02rem;
+  z-index:80; opacity:0; transition:transform .3s, opacity .3s;
+  box-shadow:0 14px 44px rgba(0,0,0,.5); max-width:90vw; font-style:italic;
+}
+.toast.show{ transform:translateX(-50%) translateY(0); opacity:1; }
+.toast.err{ border-color:rgba(200,90,56,.5); }
+
+/* ══════════════ FOOTER ══════════════ */
+.footer{
+  text-align:center; color:var(--parch-dim); font-style:italic;
+  font-size:.96rem; letter-spacing:.3px; margin:40px 20px; line-height:1.7;
+}
+
+@media (max-width:400px){
+  .cd-unit{ min-width:38px; }
+  .candles{ letter-spacing:10px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ══ HERO: the far mountain shrine ══ -->
+  <header class="hero">
+    <div class="hero-media" role="img" aria-label="La Difunta Correa en el monte, con la luz divina"></div>
+    <div class="hero-veil"></div>
+    <div class="hero-inner">
+      <div class="kicker">Santuario · Mundial 2026</div>
+      <h1 class="shrine-title">El Santuario</h1>
+      <p class="shrine-sub">Argentina 🇦🇷 vs Inglaterra 🏴 · encomendá a la Selección</p>
+      <div class="hero-countdown">
+        <span class="hc-label">faltan</span>
+        <span id="clock" class="cd-clock"></span>
+      </div>
+      <div id="kickoff-line" class="hc-kickoff"></div>
+      <div class="scroll-cue">↓ bajá a dejar tu rezo</div>
+    </div>
+  </header>
+
+  <div id="config-banner"></div>
+
+  <main>
+    <!-- ══ REZOS: the main act ══ -->
+    <section class="shrine-body">
+      <div class="candles">🕯️🕯️🕯️</div>
+      <h2 class="section-title">Rezos y ofrendas</h2>
+      <p class="rezo-intro">Bajaste hasta el santuario. Arrodillate ante el santo de tu fe y dejá tu rezo por la Scaloneta.</p>
+
+      <div class="form-card offering">
+        <div class="field">
+          <label for="rezo-nick">Tu nombre <span class="opt">(o dejalo anónimo)</span></label>
+          <input id="rezo-nick" type="text" maxlength="24" placeholder="Peregrino anónimo" autocomplete="off">
+        </div>
+
+        <div class="field">
+          <label>¿Ante quién te arrodillás?</label>
+          <div id="saint-pills" class="saint-pills" role="group" aria-label="Elegí el santo de tu rezo">
+            <button type="button" class="saint-pill" data-saint="Papa Francisco" aria-pressed="false">🕊️ Papa Francisco</button>
+            <button type="button" class="saint-pill" data-saint="Difunta Correa" aria-pressed="false">🕯️ Difunta Correa</button>
+            <button type="button" class="saint-pill" data-saint="Chiqui Tapia" aria-pressed="false">🏆 Chiqui Tapia</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="rezo-msg">Tu rezo</label>
+          <textarea id="rezo-msg" maxlength="280" rows="3" placeholder="Escribí tu ofrenda…"></textarea>
+        </div>
+
+        <button id="rezo-btn" class="submit-btn">🙏 Dejar mi rezo en el altar</button>
+      </div>
+
+      <div class="offerings-title">Ofrendas dejadas</div>
+      <div id="rezo-list" class="rezo-list">
+        <div class="empty-note">Cargando…</div>
+      </div>
+    </section>
+
+    <!-- ══ PRODE: humble secondary toggle ══ -->
+    <details class="prode-toggle">
+      <summary>
+        <span class="pt-icon">🎲</span>
+        <span class="pt-text"><strong>¿Te la jugás también?</strong> Dejá tu pronóstico del partido.</span>
+        <span class="pt-caret">▾</span>
+      </summary>
+      <div class="prode-inner">
+        <h2 class="section-title small">Pronósticos</h2>
+        <div id="pred-list" class="pred-list"><div class="empty-note">Cargando…</div></div>
+
+        <div class="form-card">
+          <div class="field">
+            <label for="nickname">Apodo</label>
+            <input id="nickname" type="text" maxlength="24" placeholder="Tu apodo" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>Resultado</label>
+            <div class="score-row">
+              <div class="score-team">
+                <div class="team-name">🇦🇷 ARG</div>
+                <input id="score-arg" type="number" min="0" max="99" inputmode="numeric" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'">
+              </div>
+              <div class="score-sep">–</div>
+              <div class="score-team">
+                <div class="team-name">ING 🏴</div>
+                <input id="score-eng" type="number" min="0" max="99" inputmode="numeric" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'">
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label for="pin">PIN secreto</label>
+            <input id="pin" type="password" maxlength="40" placeholder="Ej: 1234 o una frase" autocomplete="off">
+            <div class="hint">Tu pronóstico se cifra con este PIN y queda oculto hasta que quieras revelarlo.</div>
+          </div>
+          <button id="submit-btn" class="submit-btn">🔒 Enviar pronóstico cifrado</button>
+        </div>
+      </div>
+    </details>
+  </main>
+
+  <footer class="footer">
+    Santuario digital · tu pronóstico se cifra en tu navegador (AES-GCM).<br>
+    Que la fe —y la Scaloneta— nos acompañen. 🇦🇷
+  </footer>
+</div>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<!-- Reveal modal (replaces native prompt/confirm) -->
+<div id="reveal-modal" class="modal-overlay" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="reveal-title">
+    <h3 id="reveal-title" class="modal-title">Revelar pronóstico</h3>
+    <p id="reveal-sub" class="modal-sub"></p>
+    <div id="reveal-step-pin">
+      <input id="reveal-pin" type="password" placeholder="Ingresá el PIN secreto" autocomplete="off" aria-label="PIN secreto">
+      <div id="reveal-err" class="modal-err" role="alert" hidden></div>
+    </div>
+    <div id="reveal-step-confirm" hidden>
+      <div id="reveal-score" class="modal-score"></div>
+      <div class="modal-note">Al revelar, tu PIN se publica para que todos puedan verificar el pronóstico. Es definitivo.</div>
+    </div>
+    <div class="modal-actions">
+      <button id="reveal-cancel" type="button" class="modal-btn ghost">Cancelar</button>
+      <button id="reveal-primary" type="button" class="modal-btn primary">Descifrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Supabase as a classic UMD bundle (exposes window.supabase). Classic script,
+     not an ES module, so it survives htmlpreview's script re-injection. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ═══════════════════ CONFIG — EDIT THESE ═══════════════════ */
+const SUPABASE_URL      = 'https://zliyqzvmlwnhdxdxruhw.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_D2nxB0zwtBRAbE67LP8w7w_W_Rdh1Rr'; // publishable (public-safe) key
+const KICKOFF_UTC = '2026-07-15T19:00:00Z';   // TODO: set the real kickoff, UTC
+/* ═══════════════════════════════════════════════════════════ */
+
+const configured = SUPABASE_URL.startsWith('http') && !SUPABASE_ANON_KEY.startsWith('__');
+let sb = null; // created in init() once the UMD bundle has loaded
+
+/* ── UI helpers ── */
+const $ = id => document.getElementById(id);
+function toast(msg, isErr){
+  const t = $('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr ? ' err' : '');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => { t.className = 'toast'; }, 3400);
+}
+
+/* ── Crypto (commit-reveal) ── */
+const enc = new TextEncoder();
+const dec = new TextDecoder();
+const b64 = buf => btoa(String.fromCharCode(...new Uint8Array(buf)));
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+
+async function deriveKey(pin, salt){
+  const base = await crypto.subtle.importKey('raw', enc.encode(pin), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    { name:'PBKDF2', salt, iterations:100000, hash:'SHA-256' },
+    base, { name:'AES-GCM', length:256 }, false, ['encrypt','decrypt']
+  );
+}
+
+async function encryptPrediction(scoreObj, pin){
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv   = crypto.getRandomValues(new Uint8Array(12));
+  const key  = await deriveKey(pin, salt);
+  const ct   = await crypto.subtle.encrypt({ name:'AES-GCM', iv }, key, enc.encode(JSON.stringify(scoreObj)));
+  return { ciphertext:b64(ct), salt:b64(salt), iv:b64(iv) };
+}
+
+async function decryptPrediction(row, pin){
+  const key = await deriveKey(pin, unb64(row.salt));
+  const pt  = await crypto.subtle.decrypt({ name:'AES-GCM', iv:unb64(row.iv) }, key, unb64(row.ciphertext));
+  return JSON.parse(dec.decode(pt)); // throws if PIN wrong (auth tag fails)
+}
+
+// Public code: tamper-evident fingerprint of the sealed commitment.
+async function publicCode(nickname, ciphertext){
+  const h = await crypto.subtle.digest('SHA-256', enc.encode(nickname + '|' + ciphertext));
+  const hex = [...new Uint8Array(h)].map(b => b.toString(16).padStart(2,'0')).join('').toUpperCase();
+  return hex.slice(0,4) + '-' + hex.slice(4,8);
+}
+
+/* ── Avatar color from nickname ── */
+function avatarColor(name){
+  let h = 0;
+  for (const c of name) h = (h*31 + c.charCodeAt(0)) % 360;
+  return `hsl(${h} 45% 42%)`;
+}
+function initials(name){
+  const parts = name.trim().split(/\s+/);
+  return ((parts[0]?.[0]||'') + (parts[1]?.[0]||'')).toUpperCase() || '?';
+}
+
+/* ── Countdown ── */
+const kickoffMs = new Date(KICKOFF_UTC).getTime();
+$('kickoff-line').textContent = '⏰ ' + new Date(KICKOFF_UTC).toLocaleString('es-AR', {
+  timeZone:'America/Argentina/Buenos_Aires', weekday:'long', day:'numeric', month:'long',
+  hour:'2-digit', minute:'2-digit'
+}) + ' (hora Argentina)';
+
+function pad(n){ return String(n).padStart(2,'0'); }
+function renderClock(){
+  const diff = kickoffMs - Date.now();
+  const clk = $('clock');
+  if (diff <= 0){
+    clk.innerHTML = '<div class="cd-live">🔴 ¡ES HORA DEL PARTIDO!</div>';
+    return;
+  }
+  const d = Math.floor(diff/864e5);
+  const h = Math.floor(diff%864e5/36e5);
+  const m = Math.floor(diff%36e5/6e4);
+  const s = Math.floor(diff%6e4/1e3);
+  const units = [['DÍAS',d],['HS',h],['MIN',m],['SEG',s]];
+  clk.innerHTML = units.map(([lbl,v]) =>
+    `<div class="cd-unit"><span class="cd-num">${pad(v)}</span><span class="cd-unit-label">${lbl}</span></div>`
+  ).join('');
+}
+renderClock();
+setInterval(renderClock, 1000);
+
+/* ── Render prediction list ── */
+let rows = [];
+async function renderList(){
+  const list = $('pred-list');
+  if (rows.length === 0){
+    list.innerHTML = '<div class="empty-note">Todavía no hay pronósticos. ¡Sé el primero! 🎯</div>';
+    return;
+  }
+  const html = [];
+  for (const r of rows){
+    let right;
+    if (r.revealed && r.reveal_pin){
+      try {
+        const score = await decryptPrediction(r, r.reveal_pin);
+        right = `<div class="pi-score">${score.arg} – ${score.eng}</div><span class="pi-verified">✓ verificado</span>`;
+      } catch {
+        right = `<div class="pi-score" style="color:#ff5f57">—</div><span class="pi-verified" style="color:#ff5f57">no verifica</span>`;
+      }
+    } else {
+      right = `<div class="pi-hidden">🔒 ? – ?</div>
+        <button class="reveal-btn" data-id="${r.id}">Revelar</button>`;
+    }
+    html.push(`<div class="pred-item${r.revealed?' revealed':''}">
+      <div class="pi-avatar" style="background:${avatarColor(r.nickname)}">${initials(r.nickname)}</div>
+      <div class="pi-main">
+        <div class="pi-nick">${escapeHtml(r.nickname)}</div>
+        <div class="pi-code">${r.public_code}</div>
+      </div>
+      <div class="pi-right">${right}</div>
+    </div>`);
+  }
+  list.innerHTML = html.join('');
+  list.querySelectorAll('.reveal-btn').forEach(b =>
+    b.addEventListener('click', () => openReveal(b.dataset.id)));
+}
+
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ── Load from backend ── */
+async function load(){
+  if (!sb) return;
+  const { data, error } = await sb.from('predictions').select('*').order('created_at', { ascending:true });
+  if (error){ toast('Error al cargar: ' + error.message, true); return; }
+  rows = data || [];
+  await renderList();
+}
+
+/* ── Rezos ── */
+let rezos = [];
+let selectedSaint = null;
+const SAINT_EMOJI = { 'Papa Francisco':'🕊️', 'Difunta Correa':'🕯️', 'Chiqui Tapia':'🏆' };
+
+function renderRezos(){
+  const list = $('rezo-list');
+  if (rezos.length === 0){
+    list.innerHTML = '<div class="empty-note">Todavía no hay rezos. Encomendate a alguien. 🙏</div>';
+    return;
+  }
+  list.innerHTML = rezos.map(r => {
+    const nick = (r.nickname && r.nickname.trim()) ? escapeHtml(r.nickname) : 'Anónimo';
+    const emoji = SAINT_EMOJI[r.saint] || '🙏';
+    return `<div class="rezo-item">
+      <div class="rezo-top">
+        <span class="rezo-nick">${nick}</span>
+        <span class="rezo-saint">${emoji} ${escapeHtml(r.saint)}</span>
+      </div>
+      <div class="rezo-msg">${escapeHtml(r.message)}</div>
+    </div>`;
+  }).join('');
+}
+
+async function loadRezos(){
+  if (!sb) return;
+  const { data, error } = await sb.from('rezos').select('*').order('created_at', { ascending:false });
+  if (error){ rezos = []; renderRezos(); return; } // table may not exist yet — fail soft
+  rezos = data || [];
+  renderRezos();
+}
+
+async function submitRezo(){
+  if (!sb){ toast('Backend no configurado', true); return; }
+  const nickname = $('rezo-nick').value.trim();
+  const message = $('rezo-msg').value.trim();
+  if (!selectedSaint){ toast('Elegí a quién le rezás', true); return; }
+  if (message.length < 2){ toast('Escribí tu rezo', true); return; }
+
+  const btn = $('rezo-btn');
+  btn.disabled = true; btn.textContent = 'Enviando…';
+  try {
+    const { error } = await sb.from('rezos').insert({
+      nickname: nickname || null,
+      message,
+      saint: selectedSaint,
+    });
+    if (error) throw error;
+    toast('🙏 Tu rezo fue escuchado');
+    $('rezo-nick').value=''; $('rezo-msg').value='';
+    selectedSaint = null;
+    document.querySelectorAll('.saint-pill').forEach(p => { p.classList.remove('active'); p.setAttribute('aria-pressed','false'); });
+    await loadRezos();
+  } catch(e){
+    toast('Error: ' + (e.message||e), true);
+  } finally {
+    btn.disabled = false; btn.textContent = '🙏 Dejar mi rezo';
+  }
+}
+
+/* ── Submit ── */
+async function submit(){
+  if (!sb){ toast('Backend no configurado (ver SUPABASE_URL)', true); return; }
+  const nickname = $('nickname').value.trim();
+  const arg = $('score-arg').value;
+  const eng = $('score-eng').value;
+  const pin = $('pin').value;
+
+  if (!nickname){ toast('Ingresá un apodo', true); return; }
+  if (arg === '' || eng === ''){ toast('Completá ambos resultados', true); return; }
+  if (Number(arg) < 0 || Number(eng) < 0){ toast('Los goles no pueden ser negativos', true); return; }
+  if (pin.length < 3){ toast('El PIN debe tener al menos 3 caracteres', true); return; }
+
+  const btn = $('submit-btn');
+  btn.disabled = true; btn.textContent = 'Cifrando…';
+  try {
+    const sealed = await encryptPrediction({ arg:Number(arg), eng:Number(eng) }, pin);
+    const code = await publicCode(nickname, sealed.ciphertext);
+    const { error } = await sb.from('predictions').insert({
+      nickname,
+      public_code: code,
+      ciphertext: sealed.ciphertext,
+      salt: sealed.salt,
+      iv: sealed.iv,
+      revealed: false,
+    });
+    if (error) throw error;
+    toast('🔒 Pronóstico cifrado y enviado. Código: ' + code);
+    $('nickname').value=''; $('score-arg').value=''; $('score-eng').value=''; $('pin').value='';
+    await load();
+  } catch(e){
+    toast('Error: ' + (e.message||e), true);
+  } finally {
+    btn.disabled = false; btn.textContent = '🔒 Enviar pronóstico cifrado';
+  }
+}
+
+/* ── Reveal (custom on-brand modal, two steps: PIN → confirm) ── */
+let revealRow = null, revealScore = null, revealPin = null, revealStep = 'pin';
+
+function openReveal(id){
+  const row = rows.find(r => String(r.id) === String(id));
+  if (!row) return;
+  revealRow = row; revealScore = null; revealPin = null; revealStep = 'pin';
+  $('reveal-sub').textContent = `Pronóstico de "${row.nickname}"`;
+  $('reveal-pin').value = '';
+  $('reveal-err').hidden = true;
+  $('reveal-step-pin').hidden = false;
+  $('reveal-step-confirm').hidden = true;
+  $('reveal-primary').textContent = 'Descifrar';
+  $('reveal-modal').hidden = false;
+  setTimeout(() => $('reveal-pin').focus(), 30);
+}
+
+function closeReveal(){
+  $('reveal-modal').hidden = true;
+  revealRow = null;
+}
+
+async function revealPrimary(){
+  if (!revealRow) return;
+  const btn = $('reveal-primary');
+  if (revealStep === 'pin'){
+    const pin = $('reveal-pin').value;
+    if (pin.length < 1){ $('reveal-pin').focus(); return; }
+    btn.disabled = true; btn.textContent = 'Descifrando…';
+    try {
+      revealScore = await decryptPrediction(revealRow, pin);
+      revealPin = pin;
+    } catch {
+      $('reveal-err').textContent = 'PIN incorrecto — no se pudo descifrar';
+      $('reveal-err').hidden = false;
+      btn.disabled = false; btn.textContent = 'Descifrar';
+      $('reveal-pin').focus();
+      return;
+    }
+    revealStep = 'confirm';
+    $('reveal-score').textContent = `🇦🇷 ${revealScore.arg} – ${revealScore.eng} 🏴󠁧󠁢󠁥󠁮󠁧󠁿`;
+    $('reveal-step-pin').hidden = true;
+    $('reveal-step-confirm').hidden = false;
+    btn.disabled = false; btn.textContent = 'Revelar para todos';
+  } else {
+    btn.disabled = true; btn.textContent = 'Revelando…';
+    const { error } = await sb.from('predictions').update({ revealed:true, reveal_pin:revealPin }).eq('id', revealRow.id);
+    btn.disabled = false; btn.textContent = 'Revelar para todos';
+    if (error){ toast('Error al revelar: ' + error.message, true); return; }
+    closeReveal();
+    toast('✨ Pronóstico revelado y verificado');
+    await load();
+  }
+}
+
+/* ── Wire up ── */
+$('submit-btn').addEventListener('click', submit);
+$('rezo-btn').addEventListener('click', submitRezo);
+document.querySelectorAll('.saint-pill').forEach(p => p.addEventListener('click', () => {
+  selectedSaint = p.dataset.saint;
+  document.querySelectorAll('.saint-pill').forEach(x => { x.classList.remove('active'); x.setAttribute('aria-pressed','false'); });
+  p.classList.add('active');
+  p.setAttribute('aria-pressed','true');
+}));
+$('reveal-primary').addEventListener('click', revealPrimary);
+$('reveal-cancel').addEventListener('click', closeReveal);
+$('reveal-pin').addEventListener('keydown', e => { if (e.key === 'Enter') revealPrimary(); });
+$('reveal-modal').addEventListener('click', e => { if (e.target === $('reveal-modal')) closeReveal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('reveal-modal').hidden) closeReveal(); });
+
+if (!configured){
+  $('config-banner').innerHTML =
+    '<div class="banner"><b>⚠️ Backend sin configurar.</b> Editá <code>SUPABASE_URL</code> y ' +
+    '<code>SUPABASE_ANON_KEY</code> en el <code>&lt;script&gt;</code> de este archivo antes de usarlo.</div>';
+  $('pred-list').innerHTML = '<div class="empty-note">Configurá Supabase para ver los pronósticos.</div>';
+} else {
+  // Wait for the UMD bundle to define window.supabase (load order isn't
+  // guaranteed under htmlpreview's script re-injection), then create the
+  // client and start polling.
+  (function init(tries){
+    if (!(window.supabase && window.supabase.createClient)){
+      if (tries > 200){ // ~10s
+        $('pred-list').innerHTML = '<div class="empty-note">No se pudo cargar Supabase (revisá tu conexión).</div>';
+        return;
+      }
+      return setTimeout(() => init(tries + 1), 50);
+    }
+    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    load(); loadRezos();
+    setInterval(() => { load(); loadRezos(); }, 15000); // poll for others' submissions/reveals/rezos
+  })(0);
+}
+</script>
+</body>
+</html>
