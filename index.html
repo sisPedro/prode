@@ -204,6 +204,37 @@ body::before{
 .submit-btn:hover{ transform:translateY(-1px); }
 .submit-btn:disabled{ opacity:.5; cursor:not-allowed; transform:none; }
 
+/* ── REZOS ── */
+.rezo-intro{ font-size:.82em; color:rgba(255,255,255,.42); margin:0 0 12px 4px; line-height:1.4; }
+.opt{ color:rgba(255,255,255,.28); font-weight:400; text-transform:none; letter-spacing:0; }
+.rezo-list{ display:flex; flex-direction:column; gap:8px; margin-bottom:20px; }
+.rezo-item{
+  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07);
+  border-radius:14px; padding:12px 14px;
+}
+.rezo-top{ display:flex; align-items:center; gap:8px; margin-bottom:5px; flex-wrap:wrap; }
+.rezo-nick{ font-weight:600; font-size:.9em; color:rgba(255,255,255,.9); }
+.rezo-saint{
+  font-size:.68em; color:#74acdf; background:rgba(116,172,223,.12);
+  border:1px solid rgba(116,172,223,.25); padding:2px 8px; border-radius:99px; white-space:nowrap;
+}
+.rezo-msg{ font-size:.92em; color:rgba(255,255,255,.78); line-height:1.45; white-space:pre-wrap; word-break:break-word; }
+.saint-pills{ display:flex; flex-wrap:wrap; gap:8px; }
+.saint-pill{
+  flex:1; min-width:104px; background:rgba(0,0,0,.3);
+  border:1px solid rgba(255,255,255,.12); color:rgba(255,255,255,.7);
+  font-family:inherit; font-size:.85em; padding:10px 8px; border-radius:11px;
+  cursor:pointer; transition:background .18s,border-color .18s,color .18s;
+}
+.saint-pill:hover{ border-color:rgba(116,172,223,.4); }
+.saint-pill.active{ background:rgba(116,172,223,.16); border-color:#74acdf; color:#fff; }
+.form-card textarea{
+  width:100%; background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.1);
+  border-radius:11px; color:#fff; font-size:1em; font-family:inherit;
+  padding:12px 14px; resize:vertical; min-height:70px; transition:border-color .2s;
+}
+.form-card textarea:focus{ outline:none; border-color:rgba(116,172,223,.55); }
+
 /* ── BANNER / TOAST ── */
 .banner{
   background:rgba(255,59,48,.14); border:1px solid rgba(255,59,48,.4);
@@ -283,6 +314,36 @@ body::before{
     </div>
 
     <button id="submit-btn" class="submit-btn">🔒 Enviar pronóstico cifrado</button>
+  </div>
+
+  <!-- REZOS -->
+  <div class="section-title" style="margin-top:36px">🙏 REZOS</div>
+  <div class="rezo-intro">¿No te la querés jugar con un pronóstico? Encomendate a alguien y dejá tu rezo.</div>
+  <div id="rezo-list" class="rezo-list">
+    <div class="empty-note">Cargando…</div>
+  </div>
+
+  <div class="form-card">
+    <div class="field">
+      <label for="rezo-nick">Apodo <span class="opt">(opcional)</span></label>
+      <input id="rezo-nick" type="text" maxlength="24" placeholder="Anónimo" autocomplete="off">
+    </div>
+
+    <div class="field">
+      <label>¿A quién le rezás?</label>
+      <div id="saint-pills" class="saint-pills">
+        <button type="button" class="saint-pill" data-saint="Papa Francisco">🕊️ Papa Francisco</button>
+        <button type="button" class="saint-pill" data-saint="Difunta Correa">🕯️ Difunta Correa</button>
+        <button type="button" class="saint-pill" data-saint="Chiqui Tapia">🏆 Chiqui Tapia</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="rezo-msg">Tu rezo</label>
+      <textarea id="rezo-msg" maxlength="280" rows="3" placeholder="Escribí tu rezo…"></textarea>
+    </div>
+
+    <button id="rezo-btn" class="submit-btn">🙏 Dejar mi rezo</button>
   </div>
 
   <div class="footer">
@@ -438,6 +499,66 @@ async function load(){
   await renderList();
 }
 
+/* ── Rezos ── */
+let rezos = [];
+let selectedSaint = null;
+const SAINT_EMOJI = { 'Papa Francisco':'🕊️', 'Difunta Correa':'🕯️', 'Chiqui Tapia':'🏆' };
+
+function renderRezos(){
+  const list = $('rezo-list');
+  if (rezos.length === 0){
+    list.innerHTML = '<div class="empty-note">Todavía no hay rezos. Encomendate a alguien. 🙏</div>';
+    return;
+  }
+  list.innerHTML = rezos.map(r => {
+    const nick = (r.nickname && r.nickname.trim()) ? escapeHtml(r.nickname) : 'Anónimo';
+    const emoji = SAINT_EMOJI[r.saint] || '🙏';
+    return `<div class="rezo-item">
+      <div class="rezo-top">
+        <span class="rezo-nick">${nick}</span>
+        <span class="rezo-saint">${emoji} ${escapeHtml(r.saint)}</span>
+      </div>
+      <div class="rezo-msg">${escapeHtml(r.message)}</div>
+    </div>`;
+  }).join('');
+}
+
+async function loadRezos(){
+  if (!sb) return;
+  const { data, error } = await sb.from('rezos').select('*').order('created_at', { ascending:false });
+  if (error){ rezos = []; renderRezos(); return; } // table may not exist yet — fail soft
+  rezos = data || [];
+  renderRezos();
+}
+
+async function submitRezo(){
+  if (!sb){ toast('Backend no configurado', true); return; }
+  const nickname = $('rezo-nick').value.trim();
+  const message = $('rezo-msg').value.trim();
+  if (!selectedSaint){ toast('Elegí a quién le rezás', true); return; }
+  if (message.length < 2){ toast('Escribí tu rezo', true); return; }
+
+  const btn = $('rezo-btn');
+  btn.disabled = true; btn.textContent = 'Enviando…';
+  try {
+    const { error } = await sb.from('rezos').insert({
+      nickname: nickname || null,
+      message,
+      saint: selectedSaint,
+    });
+    if (error) throw error;
+    toast('🙏 Tu rezo fue escuchado');
+    $('rezo-nick').value=''; $('rezo-msg').value='';
+    selectedSaint = null;
+    document.querySelectorAll('.saint-pill').forEach(p => p.classList.remove('active'));
+    await loadRezos();
+  } catch(e){
+    toast('Error: ' + (e.message||e), true);
+  } finally {
+    btn.disabled = false; btn.textContent = '🙏 Dejar mi rezo';
+  }
+}
+
 /* ── Submit ── */
 async function submit(){
   if (!sb){ toast('Backend no configurado (ver SUPABASE_URL)', true); return; }
@@ -497,6 +618,12 @@ async function reveal(id){
 
 /* ── Wire up ── */
 $('submit-btn').addEventListener('click', submit);
+$('rezo-btn').addEventListener('click', submitRezo);
+document.querySelectorAll('.saint-pill').forEach(p => p.addEventListener('click', () => {
+  selectedSaint = p.dataset.saint;
+  document.querySelectorAll('.saint-pill').forEach(x => x.classList.remove('active'));
+  p.classList.add('active');
+}));
 
 if (!configured){
   $('config-banner').innerHTML =
@@ -516,8 +643,8 @@ if (!configured){
       return setTimeout(() => init(tries + 1), 50);
     }
     sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    load();
-    setInterval(load, 15000); // poll for others' submissions/reveals
+    load(); loadRezos();
+    setInterval(() => { load(); loadRezos(); }, 15000); // poll for others' submissions/reveals/rezos
   })(0);
 }
 </script>
