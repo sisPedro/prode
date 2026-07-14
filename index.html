@@ -3,402 +3,455 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Prode · Argentina vs Inglaterra</title>
+<title>El Santuario · Argentina vs Inglaterra</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  --accent:#74acdf;
-  --bg:#07090f;
-  --card:rgba(255,255,255,.04);
-  --card-border:rgba(255,255,255,.07);
-  --accent-border:rgba(116,172,223,.25);
-  --text:#fff;
-  --text-soft:rgba(255,255,255,.75); /* secondary body */
-  --text-dim:rgba(255,255,255,.55);  /* helper text — meets 4.5:1 on --bg */
+  --bg:#130d08;
+  --bg2:#1d1409;
+  --parch:#efe6d4;                     /* primary text — warm parchment */
+  --parch-soft:rgba(239,230,212,.74);  /* secondary */
+  --parch-dim:rgba(239,230,212,.55);   /* helper — meets 4.5:1 on --bg */
+  --candle:#f0ad3e;                     /* candle flame amber */
+  --candle-soft:#f4c471;
+  --gold:#d9b978;                       /* gilt / halo */
+  --gold-border:rgba(217,185,120,.22);
+  --terra:#c85a38;                      /* clay / her mantle */
+  --terra-soft:#dc7a54;
+  --sky:#8fb6d6;                        /* the celestial blue */
+  --card:rgba(239,230,212,.045);
+  --card-2:rgba(239,230,212,.07);
 }
+
+html{scroll-behavior:smooth}
 
 body{
-  font-family:'Inter',sans-serif;
-  background:#07090f;
-  color:#fff;
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:18px;
+  background:var(--bg);
+  color:var(--parch);
   min-height:100vh;
   overflow-x:hidden;
+  line-height:1.5;
 }
 
+/* Warm shrine ambience — candle glows + deep vignette */
 body::before{
   content:'';
-  position:fixed;
-  inset:0;
+  position:fixed; inset:0; z-index:0; pointer-events:none;
   background:
-    radial-gradient(ellipse 80% 50% at 15% 0%,rgba(116,172,223,.18) 0%,transparent 70%),
-    radial-gradient(ellipse 60% 40% at 85% 100%,rgba(116,172,223,.12) 0%,transparent 70%);
-  pointer-events:none;
-  z-index:0;
+    radial-gradient(ellipse 60% 40% at 50% 0%, rgba(240,173,62,.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 12% 88%, rgba(200,90,56,.10) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 88% 96%, rgba(217,185,120,.07) 0%, transparent 60%),
+    radial-gradient(circle at 50% 120%, transparent 60%, rgba(0,0,0,.5) 100%);
 }
 
-.wrap{
+.wrap{ position:relative; z-index:1; max-width:640px; margin:0 auto; }
+
+/* ══════════════ HERO — the far mountain shrine ══════════════ */
+.hero{
   position:relative;
-  z-index:1;
-  max-width:680px;
-  margin:0 auto;
-  padding:0 16px 60px;
-}
-
-/* ── HEADER ── */
-.header{ text-align:center; padding:32px 0 8px; }
-.sun{
-  font-size:46px; display:block; margin-bottom:8px;
-  animation:sun-pulse 4s ease-in-out infinite;
-  filter:drop-shadow(0 0 18px rgba(255,215,0,.7));
-}
-@keyframes sun-pulse{
-  0%,100%{transform:rotate(-5deg) scale(1);filter:drop-shadow(0 0 18px rgba(255,215,0,.7))}
-  50%{transform:rotate(5deg) scale(1.08);filter:drop-shadow(0 0 32px rgba(255,215,0,1))}
-}
-.title{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(2rem,7vw,3rem);
-  letter-spacing:4px; line-height:1;
-  background:linear-gradient(135deg,var(--accent) 0%,#ffffff 45%,var(--accent) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.subtitle{
-  font-size:.75em; letter-spacing:5px; text-transform:uppercase;
-  color:var(--text-dim); margin-top:6px;
-}
-.stripe{ display:flex; height:3px; border-radius:3px; overflow:hidden; margin:20px 0 24px; gap:2px; }
-.stripe-blue{flex:1;background:var(--accent)}
-.stripe-white{flex:1;background:rgba(255,255,255,.9)}
-
-/* ── COUNTDOWN ── */
-.countdown-card{
+  padding:36px 22px 28px;
   text-align:center;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(116,172,223,.22);
-  border-radius:22px;
-  padding:22px 18px 24px;
-  margin-bottom:14px;
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  overflow:hidden;
 }
-.cd-label{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:1.1em; letter-spacing:4px;
-  color:var(--text-dim); margin-bottom:14px;
+/* divine glow spilling from above the altar image */
+.hero::before{
+  content:''; position:absolute; left:50%; top:-4%; transform:translateX(-50%);
+  width:130%; height:58%; pointer-events:none;
+  background:radial-gradient(ellipse 46% 62% at 50% 0%, rgba(255,236,190,.22), transparent 62%);
 }
-.cd-clock{ display:flex; justify-content:center; gap:14px; }
-.cd-unit{ display:flex; flex-direction:column; align-items:center; min-width:56px; }
+.hero-inner{ position:relative; z-index:2; }
+
+/* The Difunta Correa shown whole, framed like a venerated altar painting */
+.altar{ margin:0 auto 24px; max-width:460px; }
+.altar-frame{
+  position:relative; border-radius:14px; padding:7px;
+  background:linear-gradient(145deg,#2c2110 0%,#6b5326 22%,#d8bd7a 45%,#f2dfa6 52%,#b7913f 60%,#5a4520 82%,#241a0c 100%);
+  box-shadow:0 22px 60px rgba(0,0,0,.55), 0 0 70px rgba(240,173,62,.18);
+}
+.altar-frame::after{
+  content:''; position:absolute; inset:7px; border-radius:8px; pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(255,236,190,.4), inset 0 26px 44px -22px rgba(0,0,0,.45);
+}
+.altar-img{ display:block; width:100%; height:auto; border-radius:8px; }
+.kicker{
+  font-family:'Cinzel',serif; font-weight:600;
+  font-size:.72rem; letter-spacing:4px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:12px;
+  text-shadow:0 1px 12px rgba(0,0,0,.7);
+}
+.shrine-title{
+  font-family:'Cinzel',serif; font-weight:800;
+  font-size:clamp(2.6rem,13vw,4.4rem); line-height:.98; letter-spacing:2px;
+  color:#fbf3e2;
+  text-shadow:0 2px 30px rgba(0,0,0,.65), 0 0 60px rgba(240,173,62,.25);
+}
+.shrine-sub{
+  font-size:1.06rem; font-style:italic; color:var(--parch-soft);
+  margin:12px 0 22px; text-shadow:0 1px 10px rgba(0,0,0,.7);
+}
+.hero-countdown{ display:flex; align-items:baseline; justify-content:center; gap:10px; }
+.hc-label{
+  font-family:'Cinzel',serif; font-size:.7rem; letter-spacing:3px;
+  text-transform:uppercase; color:var(--parch-dim);
+}
+.hc-clock .cd-clock, #clock.cd-clock{ display:inline-flex; }
+.cd-clock{ display:flex; justify-content:center; gap:12px; }
+.cd-unit{ display:flex; flex-direction:column; align-items:center; min-width:44px; }
 .cd-num{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(2.2rem,10vw,3rem); line-height:1;
-  color:var(--accent); font-variant-numeric:tabular-nums;
+  font-family:'Cinzel',serif; font-weight:700;
+  font-size:clamp(1.6rem,7vw,2.2rem); line-height:1; color:var(--candle-soft);
+  text-shadow:0 0 20px rgba(240,173,62,.35);
 }
 .cd-unit-label{
-  font-size:.62em; letter-spacing:2px; text-transform:uppercase;
-  color:var(--text-dim); margin-top:6px;
+  font-size:.6rem; letter-spacing:2px; text-transform:uppercase;
+  color:var(--parch-dim); margin-top:5px; font-family:'Cinzel',serif;
 }
 .cd-live{
-  font-family:'Bebas Neue',sans-serif; letter-spacing:4px;
-  font-size:2rem; color:#ff5f57; animation:blink .9s ease-in-out infinite;
+  font-family:'Cinzel',serif; font-weight:700; letter-spacing:2px;
+  font-size:1.5rem; color:var(--terra-soft);
+  animation:flicker 1.2s ease-in-out infinite;
 }
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.5}}
-.cd-kickoff{ font-size:.78em; color:var(--text-dim); margin-top:16px; }
-
-/* ── MATCH TITLE ── */
-.match-title{
-  text-align:center;
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(1.4rem,6vw,2rem); letter-spacing:2px;
-  margin:0 0 22px; line-height:1.15;
+@keyframes flicker{0%,100%{opacity:1}45%{opacity:.6}}
+.hc-kickoff{ font-size:.92rem; font-style:italic; color:var(--parch-dim); margin-top:14px; }
+.scroll-cue{
+  margin-top:26px; font-family:'Cinzel',serif; font-size:.66rem; letter-spacing:3px;
+  text-transform:uppercase; color:var(--parch-dim);
+  animation:breathe 2.6s ease-in-out infinite;
 }
-.match-title .vs{ font-size:.7em; color:rgba(255,255,255,.35);
-  font-family:'Inter';font-weight:800;letter-spacing:1px; }
+@keyframes breathe{0%,100%{opacity:.5;transform:translateY(0)}50%{opacity:1;transform:translateY(4px)}}
 
-/* ── SECTION ── */
+/* ══════════════ BANNER ══════════════ */
+#config-banner{ padding:0 20px; }
+.banner{
+  background:rgba(200,90,56,.14); border:1px solid rgba(200,90,56,.4);
+  color:#f0c0ad; border-radius:12px; padding:12px 14px;
+  font-size:.92em; margin:16px 0 0; line-height:1.5;
+}
+
+/* ══════════════ SHRINE BODY (rezos — the main act) ══════════════ */
+main{ display:block; }
+.shrine-body{ padding:8px 20px 10px; text-align:center; }
+.candles{ font-size:1.5rem; letter-spacing:14px; opacity:.9; margin:6px 0 14px; padding-left:14px;
+  filter:drop-shadow(0 0 10px rgba(240,173,62,.5)); animation:flicker 3s ease-in-out infinite; }
 .section-title{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:1.1em; letter-spacing:4px;
-  color:var(--text-dim); margin:0 0 12px 4px;
+  font-family:'Cinzel',serif; font-weight:700;
+  font-size:1.5rem; letter-spacing:2px; color:#f7ecd6;
 }
+.section-title.small{ font-size:1.15rem; opacity:.9; }
+.rezo-intro{
+  font-size:1.02rem; font-style:italic; color:var(--parch-soft);
+  max-width:30rem; margin:8px auto 22px; line-height:1.5;
+}
+.offerings-title{
+  font-family:'Cinzel',serif; font-size:.74rem; letter-spacing:3px; text-transform:uppercase;
+  color:var(--gold); margin:30px 0 14px; text-align:center;
+  position:relative;
+}
+.offerings-title::before,.offerings-title::after{
+  content:''; position:absolute; top:50%; width:22%; height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold-border));
+}
+.offerings-title::before{ left:6%; transform:scaleX(-1); }
+.offerings-title::after{ right:6%; }
 
-/* ── PREDICTION LIST ── */
-.pred-list{ display:flex; flex-direction:column; gap:8px; margin-bottom:30px; }
-.pred-item{
-  display:flex; align-items:center; gap:12px;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:14px; padding:12px 14px;
-  transition:border-color .3s,background .3s;
-}
-.pred-item.revealed{
-  border-color:rgba(116,172,223,.35);
-  background:rgba(116,172,223,.07);
-}
-.pi-avatar{
-  width:38px;height:38px;border-radius:50%;flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-weight:700;font-size:.8em;color:#fff;
-}
-.pi-main{ flex:1; min-width:0; }
-.pi-nick{
-  font-weight:600; font-size:.95em; color:rgba(255,255,255,.92);
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-.pi-code{
-  font-size:.7em; letter-spacing:1px;
-  color:var(--text-dim); font-family:ui-monospace,Menlo,monospace;
-  margin-top:2px;
-}
-.pi-right{ flex-shrink:0; text-align:right; }
-.pi-score{
-  font-family:'Bebas Neue',sans-serif; font-size:1.5em; letter-spacing:2px;
-  color:var(--accent);
-}
-.pi-hidden{ font-size:1.2em; color:rgba(255,255,255,.28); letter-spacing:2px; }
-.pi-verified{
-  display:block; font-size:.6em; letter-spacing:1px;
-  color:#34c759; margin-top:1px; text-transform:uppercase;
-}
-.reveal-btn{
-  background:rgba(116,172,223,.14);
-  border:1px solid rgba(116,172,223,.3);
-  color:var(--accent); font-weight:600; font-size:.75em;
-  padding:7px 12px; border-radius:9px; cursor:pointer;
-  transition:background .2s;
-}
-.reveal-btn:hover{ background:rgba(116,172,223,.26); }
-.empty-note{
-  text-align:center; color:var(--text-dim);
-  font-style:italic; font-size:.85em; padding:18px 0;
-}
-
-/* ── FORM ── */
+/* ══════════════ CARDS / FORMS (votive offering) ══════════════ */
 .form-card{
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(116,172,223,.2);
-  border-radius:20px; padding:20px 18px 22px;
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  text-align:left;
+  background:var(--card);
+  border:1px solid var(--gold-border);
+  border-radius:16px; padding:22px 20px 24px;
+  box-shadow:inset 0 1px 0 rgba(255,240,205,.05), 0 10px 40px rgba(0,0,0,.3);
 }
-.field{ margin-bottom:14px; }
+.form-card.offering{
+  background:linear-gradient(180deg, rgba(240,173,62,.06), rgba(239,230,212,.03));
+  border-color:rgba(217,185,120,.3);
+}
+.field{ margin-bottom:16px; }
 .field label{
-  display:block; font-size:.72em; letter-spacing:1px; text-transform:uppercase;
-  color:var(--text-dim); margin-bottom:6px;
+  display:block; font-family:'Cinzel',serif; font-weight:600;
+  font-size:.7rem; letter-spacing:2px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:7px;
 }
-.field input{
-  width:100%; background:rgba(0,0,0,.3);
-  border:1px solid rgba(255,255,255,.1); border-radius:11px;
-  color:#fff; font-size:1em; font-family:inherit; padding:12px 14px;
-  transition:border-color .2s;
+.opt{ color:var(--parch-dim); font-weight:400; text-transform:none; letter-spacing:0; font-family:'Cormorant Garamond',serif; font-style:italic; font-size:1.1em; }
+.field input, .form-card textarea{
+  width:100%; background:rgba(10,7,4,.4);
+  border:1px solid rgba(217,185,120,.18); border-radius:10px;
+  color:var(--parch); font-size:1.05rem; font-family:'Cormorant Garamond',serif; padding:11px 14px;
+  transition:border-color .2s, box-shadow .2s;
 }
-.field input:focus{ outline:none; border-color:rgba(116,172,223,.55); }
+.form-card textarea{ resize:vertical; min-height:84px; line-height:1.45; }
+.field input:focus, .form-card textarea:focus{
+  outline:none; border-color:var(--candle);
+  box-shadow:0 0 0 3px rgba(240,173,62,.12);
+}
+.field input::placeholder, .form-card textarea::placeholder{ color:rgba(239,230,212,.32); font-style:italic; }
+
 .score-row{ display:flex; align-items:flex-end; gap:12px; }
 .score-team{ flex:1; text-align:center; }
-.score-team .team-name{
-  font-family:'Bebas Neue',sans-serif; font-size:1.15em; letter-spacing:1px;
-  color:rgba(255,255,255,.7); margin-bottom:6px;
-}
-.score-team input{ text-align:center; font-size:1.6em; font-family:'Bebas Neue',sans-serif; padding:8px; -moz-appearance:textfield; appearance:textfield; }
-/* Hide the number-input up/down spinner arrows */
+.score-team .team-name{ font-family:'Cinzel',serif; font-size:.9rem; letter-spacing:1px; color:var(--parch-soft); margin-bottom:6px; }
+.score-team input{ text-align:center; font-size:1.7rem; font-family:'Cinzel',serif; padding:8px; -moz-appearance:textfield; appearance:textfield; }
 .score-team input::-webkit-outer-spin-button,
 .score-team input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
-.score-sep{ font-family:'Bebas Neue',sans-serif; font-size:1.6em; color:rgba(255,255,255,.3); padding-bottom:10px; }
-.hint{ font-size:.72em; color:var(--text-dim); margin-top:5px; line-height:1.4; }
-.submit-btn{
-  width:100%; margin-top:6px;
-  background:linear-gradient(135deg,var(--accent),#5a8fc0);
-  border:none; border-radius:12px; color:#07090f;
-  font-weight:800; font-size:1em; letter-spacing:.5px;
-  padding:14px; cursor:pointer; transition:transform .12s,opacity .2s;
-}
-.submit-btn:hover{ transform:translateY(-1px); }
-.submit-btn:disabled{ opacity:.5; cursor:not-allowed; transform:none; }
+.score-sep{ font-family:'Cinzel',serif; font-size:1.7rem; color:var(--parch-dim); padding-bottom:8px; }
+.hint{ font-size:.92rem; font-style:italic; color:var(--parch-dim); margin-top:6px; line-height:1.45; }
 
-/* ── REZOS ── */
-.rezo-intro{ font-size:.82em; color:var(--text-dim); margin:0 0 12px 4px; line-height:1.4; }
-.opt{ color:rgba(255,255,255,.45); font-weight:400; text-transform:none; letter-spacing:0; }
-.rezo-list{ display:flex; flex-direction:column; gap:8px; margin-bottom:20px; }
-.rezo-item{
-  background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07);
-  border-radius:14px; padding:12px 14px;
-}
-.rezo-top{ display:flex; align-items:center; gap:8px; margin-bottom:5px; flex-wrap:wrap; }
-.rezo-nick{ font-weight:600; font-size:.9em; color:rgba(255,255,255,.9); }
-.rezo-saint{
-  font-size:.68em; color:var(--accent); background:rgba(116,172,223,.12);
-  border:1px solid rgba(116,172,223,.25); padding:2px 8px; border-radius:99px; white-space:nowrap;
-}
-.rezo-msg{ font-size:.92em; color:rgba(255,255,255,.78); line-height:1.45; white-space:pre-wrap; word-break:break-word; }
-.saint-pills{ display:flex; flex-wrap:wrap; gap:8px; }
+/* Saint choice — altar plaques */
+.saint-pills{ display:flex; flex-direction:column; gap:8px; }
 .saint-pill{
-  flex:1; min-width:104px; background:rgba(0,0,0,.3);
-  border:1px solid rgba(255,255,255,.12); color:rgba(255,255,255,.7);
-  font-family:inherit; font-size:.85em; padding:10px 8px; border-radius:11px;
-  cursor:pointer; transition:background .18s,border-color .18s,color .18s;
+  width:100%; text-align:left;
+  background:rgba(10,7,4,.35); border:1px solid rgba(217,185,120,.16);
+  color:var(--parch-soft); font-family:'Cinzel',serif; font-weight:600;
+  font-size:.92rem; letter-spacing:1px; padding:13px 16px; border-radius:11px;
+  cursor:pointer; transition:all .2s;
 }
-.saint-pill:hover{ border-color:rgba(116,172,223,.4); }
-.saint-pill.active{ background:rgba(116,172,223,.16); border-color:var(--accent); color:#fff; }
-.form-card textarea{
-  width:100%; background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.1);
-  border-radius:11px; color:#fff; font-size:1em; font-family:inherit;
-  padding:12px 14px; resize:vertical; min-height:70px; transition:border-color .2s;
-}
-.form-card textarea:focus{ outline:none; border-color:rgba(116,172,223,.55); }
-
-/* ── BANNER / TOAST ── */
-.banner{
-  background:rgba(255,59,48,.14); border:1px solid rgba(255,59,48,.4);
-  color:#ff9d97; border-radius:12px; padding:12px 14px;
-  font-size:.82em; margin-bottom:16px; line-height:1.5;
-}
-.toast{
-  position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(80px);
-  background:rgba(20,24,34,.96); border:1px solid rgba(116,172,223,.4);
-  color:#fff; padding:12px 18px; border-radius:12px; font-size:.85em;
-  z-index:50; opacity:0; transition:transform .3s,opacity .3s;
-  box-shadow:0 12px 40px rgba(0,0,0,.5); max-width:90vw;
-}
-.toast.show{ transform:translateX(-50%) translateY(0); opacity:1; }
-.toast.err{ border-color:rgba(255,59,48,.5); }
-
-.footer{
-  text-align:center; color:rgba(255,255,255,.5);
-  font-size:.72em; letter-spacing:1px; margin-top:34px; line-height:1.6;
+.saint-pill:hover{ border-color:rgba(240,173,62,.45); color:var(--parch); }
+.saint-pill.active{
+  background:linear-gradient(180deg, rgba(240,173,62,.2), rgba(200,90,56,.12));
+  border-color:var(--candle); color:#fbf3e2;
+  box-shadow:0 0 22px rgba(240,173,62,.2);
 }
 
-/* ── REVEAL MODAL ── */
+.submit-btn{
+  width:100%; margin-top:8px;
+  background:linear-gradient(180deg, var(--candle), #cf7f2a);
+  border:1px solid rgba(255,220,150,.5); border-radius:12px; color:#2a1806;
+  font-family:'Cinzel',serif; font-weight:700; font-size:1rem; letter-spacing:1px;
+  padding:15px; cursor:pointer; transition:transform .12s, box-shadow .2s;
+  box-shadow:0 6px 24px rgba(240,173,62,.22);
+}
+.submit-btn:hover{ transform:translateY(-1px); box-shadow:0 10px 30px rgba(240,173,62,.34); }
+.submit-btn:disabled{ opacity:.55; cursor:not-allowed; transform:none; }
+
+/* ══════════════ REZO LIST — ofrendas ══════════════ */
+.rezo-list{ display:flex; flex-direction:column; gap:12px; margin-bottom:10px; text-align:left; }
+.rezo-item{
+  position:relative;
+  background:linear-gradient(180deg, rgba(239,230,212,.06), rgba(239,230,212,.03));
+  border:1px solid var(--gold-border); border-left:3px solid rgba(240,173,62,.5);
+  border-radius:12px; padding:14px 16px;
+  box-shadow:0 6px 22px rgba(0,0,0,.22);
+}
+.rezo-top{ display:flex; align-items:center; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
+.rezo-nick{ font-family:'Cinzel',serif; font-weight:600; font-size:.9rem; letter-spacing:.5px; color:#f7ecd6; }
+.rezo-saint{
+  font-family:'Cinzel',serif; font-size:.62rem; letter-spacing:1px; text-transform:uppercase;
+  color:var(--candle-soft); background:rgba(240,173,62,.12);
+  border:1px solid rgba(240,173,62,.3); padding:3px 9px; border-radius:99px; white-space:nowrap;
+}
+.rezo-msg{ font-size:1.12rem; font-style:italic; color:var(--parch); line-height:1.45; white-space:pre-wrap; word-break:break-word; }
+.empty-note{ text-align:center; color:var(--parch-dim); font-style:italic; font-size:1.02rem; padding:20px 0; }
+
+/* ══════════════ PRODE — humble secondary toggle ══════════════ */
+.prode-toggle{
+  margin:34px 20px 0;
+  background:rgba(10,7,4,.3); border:1px solid rgba(217,185,120,.14);
+  border-radius:14px; overflow:hidden;
+}
+.prode-toggle summary{
+  list-style:none; cursor:pointer; display:flex; align-items:center; gap:12px;
+  padding:16px 18px; font-family:'Cormorant Garamond',serif;
+}
+.prode-toggle summary::-webkit-details-marker{ display:none; }
+.pt-icon{ font-size:1.3rem; opacity:.85; }
+.pt-text{ flex:1; font-size:1.04rem; color:var(--parch-soft); }
+.pt-text strong{ color:var(--parch); font-weight:600; }
+.pt-caret{ color:var(--gold); transition:transform .25s; font-size:.9rem; }
+.prode-toggle[open] .pt-caret{ transform:rotate(180deg); }
+.prode-inner{ padding:4px 18px 22px; border-top:1px solid rgba(217,185,120,.12); text-align:center; }
+.prode-inner .section-title{ margin:16px 0 12px; }
+.prode-inner .form-card{ margin-top:18px; }
+
+/* prediction rows (rendered by JS) — muted, secondary */
+.pred-list{ display:flex; flex-direction:column; gap:8px; text-align:left; }
+.pred-item{
+  display:flex; align-items:center; gap:12px;
+  background:var(--card); border:1px solid rgba(217,185,120,.12);
+  border-radius:11px; padding:11px 13px; transition:border-color .3s, background .3s;
+}
+.pred-item.revealed{ border-color:rgba(240,173,62,.4); background:rgba(240,173,62,.06); }
+.pi-avatar{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cinzel',serif; font-weight:700;font-size:.8rem;color:#2a1806;
+}
+.pi-main{ flex:1; min-width:0; }
+.pi-nick{ font-family:'Cinzel',serif; font-weight:600; font-size:.9rem; color:var(--parch); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pi-code{ font-size:.72rem; letter-spacing:1px; color:var(--parch-dim); font-family:ui-monospace,Menlo,monospace; margin-top:2px; }
+.pi-right{ flex-shrink:0; text-align:right; }
+.pi-score{ font-family:'Cinzel',serif; font-weight:700; font-size:1.35rem; letter-spacing:1px; color:var(--candle-soft); }
+.pi-hidden{ font-size:1.15rem; color:var(--parch-dim); letter-spacing:2px; }
+.pi-verified{ display:block; font-size:.58rem; letter-spacing:1px; color:#7fb98a; margin-top:1px; text-transform:uppercase; font-family:'Cinzel',serif; }
+.reveal-btn{
+  background:rgba(240,173,62,.12); border:1px solid rgba(240,173,62,.34);
+  color:var(--candle-soft); font-family:'Cinzel',serif; font-weight:600; font-size:.72rem; letter-spacing:.5px;
+  padding:7px 13px; border-radius:9px; cursor:pointer; transition:background .2s;
+}
+.reveal-btn:hover{ background:rgba(240,173,62,.24); }
+
+/* ══════════════ REVEAL MODAL (restyled) ══════════════ */
 .modal-overlay{
   position:fixed; inset:0; z-index:70;
   display:flex; align-items:center; justify-content:center; padding:20px;
-  background:rgba(4,6,10,.72); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+  background:rgba(10,6,3,.78); backdrop-filter:blur(5px); -webkit-backdrop-filter:blur(5px);
 }
 .modal-overlay[hidden]{ display:none; }
 .modal{
   width:100%; max-width:380px;
-  background:#0e131c; border:1px solid var(--accent-border);
-  border-radius:18px; padding:22px;
-  box-shadow:0 24px 70px rgba(0,0,0,.6);
+  background:linear-gradient(180deg,#1f1509,#160f07);
+  border:1px solid var(--gold-border); border-radius:18px; padding:24px;
+  box-shadow:0 24px 70px rgba(0,0,0,.65), 0 0 60px rgba(240,173,62,.08);
 }
-.modal-title{ font-family:'Bebas Neue',sans-serif; font-size:1.5em; letter-spacing:2px; }
-.modal-sub{ font-size:.85em; color:var(--text-dim); margin:4px 0 16px; }
+.modal-title{ font-family:'Cinzel',serif; font-weight:700; font-size:1.4rem; letter-spacing:1px; color:#f7ecd6; }
+.modal-sub{ font-size:1.02rem; font-style:italic; color:var(--parch-dim); margin:5px 0 16px; }
 .modal input{
-  width:100%; background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.12);
-  border-radius:11px; color:#fff; font-size:1em; font-family:inherit; padding:12px 14px;
-  transition:border-color .2s;
+  width:100%; background:rgba(10,7,4,.5); border:1px solid rgba(217,185,120,.2);
+  border-radius:10px; color:var(--parch); font-size:1.05rem; font-family:'Cormorant Garamond',serif; padding:12px 14px;
 }
-.modal input:focus{ outline:none; border-color:var(--accent); }
-.modal-err{ color:#ff6b6b; font-size:.8em; margin-top:8px; }
-.modal-score{
-  font-family:'Bebas Neue',sans-serif; font-size:2.2em; letter-spacing:3px;
-  color:var(--accent); text-align:center; padding:6px 0 10px;
-}
-.modal-note{ font-size:.78em; color:var(--text-dim); line-height:1.45; }
-.modal-actions{ display:flex; gap:10px; margin-top:18px; }
-.modal-btn{
-  flex:1; padding:12px; border-radius:11px; font-weight:700; font-size:.9em;
-  font-family:inherit; cursor:pointer; border:none; transition:transform .1s;
-}
+.modal input:focus{ outline:none; border-color:var(--candle); }
+.modal-err{ color:var(--terra-soft); font-size:.95rem; font-style:italic; margin-top:8px; }
+.modal-score{ font-family:'Cinzel',serif; font-weight:700; font-size:2.2rem; letter-spacing:2px; color:var(--candle-soft); text-align:center; padding:8px 0 10px; text-shadow:0 0 24px rgba(240,173,62,.3); }
+.modal-note{ font-size:.96rem; font-style:italic; color:var(--parch-dim); line-height:1.45; }
+.modal-actions{ display:flex; gap:10px; margin-top:20px; }
+.modal-btn{ flex:1; padding:13px; border-radius:11px; font-family:'Cinzel',serif; font-weight:700; font-size:.82rem; letter-spacing:1px; cursor:pointer; border:none; transition:transform .1s; }
 .modal-btn:hover{ transform:translateY(-1px); }
 .modal-btn:disabled{ opacity:.5; cursor:not-allowed; transform:none; }
-.modal-btn.ghost{ background:rgba(255,255,255,.06); color:var(--text-soft); border:1px solid rgba(255,255,255,.12); }
-.modal-btn.primary{ background:linear-gradient(135deg,var(--accent),#5a8fc0); color:#07090f; }
+.modal-btn.ghost{ background:rgba(239,230,212,.06); color:var(--parch-soft); border:1px solid rgba(217,185,120,.2); }
+.modal-btn.primary{ background:linear-gradient(180deg,var(--candle),#cf7f2a); color:#2a1806; }
+
+/* ══════════════ TOAST ══════════════ */
+.toast{
+  position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(80px);
+  background:linear-gradient(180deg,#241809,#180f07); border:1px solid var(--gold-border);
+  color:var(--parch); padding:13px 20px; border-radius:12px; font-size:1.02rem;
+  z-index:80; opacity:0; transition:transform .3s, opacity .3s;
+  box-shadow:0 14px 44px rgba(0,0,0,.5); max-width:90vw; font-style:italic;
+}
+.toast.show{ transform:translateX(-50%) translateY(0); opacity:1; }
+.toast.err{ border-color:rgba(200,90,56,.5); }
+
+/* ══════════════ FOOTER ══════════════ */
+.footer{
+  text-align:center; color:var(--parch-dim); font-style:italic;
+  font-size:.96rem; letter-spacing:.3px; margin:40px 20px; line-height:1.7;
+}
+
+@media (max-width:400px){
+  .cd-unit{ min-width:38px; }
+  .candles{ letter-spacing:10px; }
+}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <header class="header">
-    <span class="sun" aria-hidden="true">☀️</span>
-    <h1 class="title">PRODE FMV</h1>
-    <div class="subtitle">Predicciones · cifrar y revelar</div>
-    <div class="stripe" aria-hidden="true"><div class="stripe-blue"></div><div class="stripe-white"></div><div class="stripe-blue"></div></div>
+  <!-- ══ HERO: the far mountain shrine ══ -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="kicker">Santuario · Mundial 2026</div>
+      <figure class="altar">
+        <div class="altar-frame">
+          <img class="altar-img" src="images.webp" alt="La Difunta Correa en el monte, con la luz divina" width="723" height="424">
+        </div>
+      </figure>
+      <h1 class="shrine-title">El Santuario</h1>
+      <p class="shrine-sub">Argentina 🇦🇷 vs Inglaterra 🏴‍☠️ · encomendá a la Selección</p>
+      <div class="hero-countdown">
+        <span class="hc-label">faltan</span>
+        <span id="clock" class="cd-clock"></span>
+      </div>
+      <div id="kickoff-line" class="hc-kickoff"></div>
+      <div class="scroll-cue">↓ bajá a dejar tu rezo</div>
+    </div>
   </header>
 
   <div id="config-banner"></div>
 
   <main>
-  <!-- COUNTDOWN -->
-  <div class="countdown-card">
-    <div class="cd-label">FALTA PARA EL PARTIDO</div>
-    <div id="clock" class="cd-clock"></div>
-    <div id="kickoff-line" class="cd-kickoff"></div>
-  </div>
+    <!-- ══ REZOS: the main act ══ -->
+    <section class="shrine-body">
+      <div class="candles">🕯️🕯️🕯️</div>
+      <h2 class="section-title">Rezos y ofrendas</h2>
+      <p class="rezo-intro">Bajaste hasta el santuario. Arrodillate ante el santo de tu fe y dejá tu rezo por la Scaloneta.</p>
 
-  <h2 class="match-title">🇦🇷 ARGENTINA <span class="vs">vs</span> INGLATERRA 🏴󠁧󠁢󠁥󠁮󠁧󠁿</h2>
-
-  <!-- PREDICTION LIST -->
-  <h2 class="section-title">PRONÓSTICOS</h2>
-  <div id="pred-list" class="pred-list">
-    <div class="empty-note">Cargando…</div>
-  </div>
-
-  <!-- FORM -->
-  <h2 class="section-title">DEJÁ TU PRONÓSTICO</h2>
-  <div class="form-card">
-    <div class="field">
-      <label for="nickname">Apodo</label>
-      <input id="nickname" type="text" maxlength="24" placeholder="Tu apodo" autocomplete="off">
-    </div>
-
-    <div class="field">
-      <label>Resultado</label>
-      <div class="score-row">
-        <div class="score-team">
-          <div class="team-name">🇦🇷 ARG</div>
-          <input id="score-arg" type="number" min="0" max="99" inputmode="numeric" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'">
+      <div class="form-card offering">
+        <div class="field">
+          <label for="rezo-nick">Tu nombre <span class="opt">(o dejalo anónimo)</span></label>
+          <input id="rezo-nick" type="text" maxlength="24" placeholder="Peregrino anónimo" autocomplete="off">
         </div>
-        <div class="score-sep">–</div>
-        <div class="score-team">
-          <div class="team-name">ING 🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
-          <input id="score-eng" type="number" min="0" max="99" inputmode="numeric" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'">
+
+        <div class="field">
+          <label>¿Ante quién te arrodillás?</label>
+          <div id="saint-pills" class="saint-pills" role="group" aria-label="Elegí el santo de tu rezo">
+            <button type="button" class="saint-pill" data-saint="Papa Francisco" aria-pressed="false">🕊️ Papa Francisco</button>
+            <button type="button" class="saint-pill" data-saint="Difunta Correa" aria-pressed="false">🕯️ Difunta Correa</button>
+            <button type="button" class="saint-pill" data-saint="Chiqui Tapia" aria-pressed="false">🏆 Chiqui Tapia</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="rezo-msg">Tu rezo</label>
+          <textarea id="rezo-msg" maxlength="280" rows="3" placeholder="Escribí tu ofrenda…"></textarea>
+        </div>
+
+        <button id="rezo-btn" class="submit-btn">🙏 Dejar mi rezo en el altar</button>
+      </div>
+
+      <div class="offerings-title">Ofrendas dejadas</div>
+      <div id="rezo-list" class="rezo-list">
+        <div class="empty-note">Cargando…</div>
+      </div>
+    </section>
+
+    <!-- ══ PRODE: humble secondary toggle ══ -->
+    <details class="prode-toggle">
+      <summary>
+        <span class="pt-icon">🎲</span>
+        <span class="pt-text"><strong>¿Sos más timbero?</strong> Dejá tu pronóstico del partido.</span>
+        <span class="pt-caret">▾</span>
+      </summary>
+      <div class="prode-inner">
+        <h2 class="section-title small">Pronósticos</h2>
+        <div id="pred-list" class="pred-list"><div class="empty-note">Cargando…</div></div>
+
+        <div class="form-card">
+          <div class="field">
+            <label for="nickname">Apodo</label>
+            <input id="nickname" type="text" maxlength="24" placeholder="Tu apodo" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>Resultado</label>
+            <div class="score-row">
+              <div class="score-team">
+                <div class="team-name">🇦🇷 ARG</div>
+                <input id="score-arg" type="number" min="0" max="99" inputmode="numeric" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'">
+              </div>
+              <div class="score-sep">–</div>
+              <div class="score-team">
+                <div class="team-name">ING 🏴‍☠️</div>
+                <input id="score-eng" type="number" min="0" max="99" inputmode="numeric" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'">
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label for="pin">PIN secreto</label>
+            <input id="pin" type="password" maxlength="40" placeholder="Ej: 1234 o una frase" autocomplete="off">
+            <div class="hint">Tu pronóstico se cifra con este PIN y queda oculto hasta que quieras revelarlo.</div>
+          </div>
+          <button id="submit-btn" class="submit-btn">🔒 Enviar pronóstico cifrado</button>
         </div>
       </div>
-    </div>
-
-    <div class="field">
-      <label for="pin">PIN secreto</label>
-      <input id="pin" type="password" maxlength="40" placeholder="Ej: 1234 o una frase" autocomplete="off">
-      <div class="hint">Tu pronóstico se cifra con este PIN y queda oculto. Guardalo bien: lo necesitás para revelar. Cuando reveles, el PIN se publica para que todos puedan verificar que no lo cambiaste.</div>
-    </div>
-
-    <button id="submit-btn" class="submit-btn">🔒 Enviar pronóstico cifrado</button>
-  </div>
-
-  <!-- REZOS -->
-  <h2 class="section-title" style="margin-top:36px">🙏 REZOS</h2>
-  <div class="rezo-intro">¿No te la querés jugar con un pronóstico? Encomendate a alguien y dejá tu rezo.</div>
-  <div id="rezo-list" class="rezo-list">
-    <div class="empty-note">Cargando…</div>
-  </div>
-
-  <div class="form-card">
-    <div class="field">
-      <label for="rezo-nick">Apodo <span class="opt">(opcional)</span></label>
-      <input id="rezo-nick" type="text" maxlength="24" placeholder="Anónimo" autocomplete="off">
-    </div>
-
-    <div class="field">
-      <label>¿A quién le rezás?</label>
-      <div id="saint-pills" class="saint-pills" role="group" aria-label="Elegí a quién le rezás">
-        <button type="button" class="saint-pill" data-saint="Papa Francisco" aria-pressed="false">🕊️ Papa Francisco</button>
-        <button type="button" class="saint-pill" data-saint="Difunta Correa" aria-pressed="false">🕯️ Difunta Correa</button>
-        <button type="button" class="saint-pill" data-saint="Chiqui Tapia" aria-pressed="false">🏆 Chiqui Tapia</button>
-      </div>
-    </div>
-
-    <div class="field">
-      <label for="rezo-msg">Tu rezo</label>
-      <textarea id="rezo-msg" maxlength="280" rows="3" placeholder="Escribí tu rezo…"></textarea>
-    </div>
-
-    <button id="rezo-btn" class="submit-btn">🙏 Dejar mi rezo</button>
-  </div>
+    </details>
   </main>
 
   <footer class="footer">
-    Cifrado en tu navegador (AES-GCM · PBKDF2). El servidor sólo guarda datos cifrados.<br>
-    Nadie puede ver tu pronóstico hasta que vos lo reveles. 🇦🇷
+    Santuario digital · tu pronóstico se cifra en tu navegador (AES-GCM).<br>
+    Que la fe —y la Scaloneta— nos acompañen. 🇦🇷
   </footer>
 </div>
 
@@ -706,7 +759,7 @@ async function revealPrimary(){
       return;
     }
     revealStep = 'confirm';
-    $('reveal-score').textContent = `🇦🇷 ${revealScore.arg} – ${revealScore.eng} 🏴󠁧󠁢󠁥󠁮󠁧󠁿`;
+    $('reveal-score').textContent = `🇦🇷 ${revealScore.arg} – ${revealScore.eng} 🏴‍☠️`;
     $('reveal-step-pin').hidden = true;
     $('reveal-step-confirm').hidden = false;
     btn.disabled = false; btn.textContent = 'Revelar para todos';
