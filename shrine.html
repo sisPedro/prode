@@ -649,7 +649,7 @@ function renderRezos(){
 
 async function loadRezos(){
   if (!sb) return;
-  const { data, error } = await sb.from('rezos').select('*').gte('created_at', MATCH_FROM_UTC).order('created_at', { ascending:false });
+  const { data, error } = await sb.from('rezos').select('*').order('created_at', { ascending:false });
   if (error){ rezos = []; renderRezos(); return; } // table may not exist yet — fail soft
   rezos = data || [];
   renderRezos();
