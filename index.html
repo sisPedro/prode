@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>El Santuario · Argentina vs Inglaterra</title>
+<title>El Santuario · España vs Argentina</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
@@ -360,7 +360,7 @@ main{ display:block; }
         </div>
       </figure>
       <h1 class="shrine-title">El Santuario</h1>
-      <p class="shrine-sub">Argentina 🇦🇷 vs Inglaterra 🏴‍☠️ · encomendá a la Selección</p>
+      <p class="shrine-sub">España 🇪🇸 vs Argentina 🇦🇷 · encomendá a la Selección en la final</p>
       <div class="hero-countdown">
         <span class="hc-label">faltan</span>
         <span id="clock" class="cd-clock"></span>
@@ -428,13 +428,13 @@ main{ display:block; }
             <label>Resultado</label>
             <div class="score-row">
               <div class="score-team">
-                <div class="team-name">🇦🇷 ARG</div>
-                <input id="score-arg" type="number" min="0" max="99" inputmode="numeric" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'">
+                <div class="team-name">🇪🇸 ESP</div>
+                <input id="score-esp" type="number" min="0" max="99" inputmode="numeric" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'">
               </div>
               <div class="score-sep">–</div>
               <div class="score-team">
-                <div class="team-name">ING 🏴‍☠️</div>
-                <input id="score-eng" type="number" min="0" max="99" inputmode="numeric" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'">
+                <div class="team-name">ARG 🇦🇷</div>
+                <input id="score-arg" type="number" min="0" max="99" inputmode="numeric" placeholder="0" onfocus="this.placeholder=''" onblur="this.placeholder='0'">
               </div>
             </div>
           </div>
@@ -484,7 +484,8 @@ main{ display:block; }
 /* ═══════════════════ CONFIG — EDIT THESE ═══════════════════ */
 const SUPABASE_URL      = 'https://zliyqzvmlwnhdxdxruhw.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_D2nxB0zwtBRAbE67LP8w7w_W_Rdh1Rr'; // publishable (public-safe) key
-const KICKOFF_UTC = '2026-07-15T19:00:00Z';   // TODO: set the real kickoff, UTC
+const KICKOFF_UTC = '2026-07-19T19:00:00Z';    // final — dom 19/7, 16:00 ART (15:00 ET, MetLife)
+const MATCH_FROM_UTC = '2026-07-18T22:00:00Z'; // only show rows created for THIS match (hides ARG–ING semi data)
 /* ═══════════════════════════════════════════════════════════ */
 
 const configured = SUPABASE_URL.startsWith('http') && !SUPABASE_ANON_KEY.startsWith('__');
@@ -558,7 +559,7 @@ function renderClock(){
   const diff = kickoffMs - Date.now();
   const clk = $('clock');
   if (diff <= 0){
-    clk.innerHTML = '<div class="cd-live">🔴 ¡ES HORA DEL PARTIDO!</div>';
+    clk.innerHTML = '<div class="cd-live">🔴 ¡ES HORA DE LA FINAL!</div>';
     return;
   }
   const d = Math.floor(diff/864e5);
@@ -587,7 +588,7 @@ async function renderList(){
     if (r.revealed && r.reveal_pin){
       try {
         const score = await decryptPrediction(r, r.reveal_pin);
-        right = `<div class="pi-score">${score.arg} – ${score.eng}</div><span class="pi-verified">✓ verificado</span>`;
+        right = `<div class="pi-score">${score.esp} – ${score.arg}</div><span class="pi-verified">✓ verificado</span>`;
       } catch {
         right = `<div class="pi-score" style="color:#ff5f57">—</div><span class="pi-verified" style="color:#ff5f57">no verifica</span>`;
       }
@@ -616,7 +617,7 @@ function escapeHtml(s){
 /* ── Load from backend ── */
 async function load(){
   if (!sb) return;
-  const { data, error } = await sb.from('predictions').select('*').order('created_at', { ascending:true });
+  const { data, error } = await sb.from('predictions').select('*').gte('created_at', MATCH_FROM_UTC).order('created_at', { ascending:true });
   if (error){ toast('Error al cargar: ' + error.message, true); return; }
   rows = data || [];
   await renderList();
@@ -648,7 +649,7 @@ function renderRezos(){
 
 async function loadRezos(){
   if (!sb) return;
-  const { data, error } = await sb.from('rezos').select('*').order('created_at', { ascending:false });
+  const { data, error } = await sb.from('rezos').select('*').gte('created_at', MATCH_FROM_UTC).order('created_at', { ascending:false });
   if (error){ rezos = []; renderRezos(); return; } // table may not exist yet — fail soft
   rezos = data || [];
   renderRezos();
@@ -686,19 +687,19 @@ async function submitRezo(){
 async function submit(){
   if (!sb){ toast('Backend no configurado (ver SUPABASE_URL)', true); return; }
   const nickname = $('nickname').value.trim();
+  const esp = $('score-esp').value;
   const arg = $('score-arg').value;
-  const eng = $('score-eng').value;
   const pin = $('pin').value;
 
   if (!nickname){ toast('Ingresá un apodo', true); return; }
-  if (arg === '' || eng === ''){ toast('Completá ambos resultados', true); return; }
-  if (Number(arg) < 0 || Number(eng) < 0){ toast('Los goles no pueden ser negativos', true); return; }
+  if (esp === '' || arg === ''){ toast('Completá ambos resultados', true); return; }
+  if (Number(esp) < 0 || Number(arg) < 0){ toast('Los goles no pueden ser negativos', true); return; }
   if (pin.length < 3){ toast('El PIN debe tener al menos 3 caracteres', true); return; }
 
   const btn = $('submit-btn');
   btn.disabled = true; btn.textContent = 'Cifrando…';
   try {
-    const sealed = await encryptPrediction({ arg:Number(arg), eng:Number(eng) }, pin);
+    const sealed = await encryptPrediction({ esp:Number(esp), arg:Number(arg) }, pin);
     const code = await publicCode(nickname, sealed.ciphertext);
     const { error } = await sb.from('predictions').insert({
       nickname,
@@ -710,7 +711,7 @@ async function submit(){
     });
     if (error) throw error;
     toast('🔒 Pronóstico cifrado y enviado. Código: ' + code);
-    $('nickname').value=''; $('score-arg').value=''; $('score-eng').value=''; $('pin').value='';
+    $('nickname').value=''; $('score-esp').value=''; $('score-arg').value=''; $('pin').value='';
     await load();
   } catch(e){
     toast('Error: ' + (e.message||e), true);
@@ -759,7 +760,7 @@ async function revealPrimary(){
       return;
     }
     revealStep = 'confirm';
-    $('reveal-score').textContent = `🇦🇷 ${revealScore.arg} – ${revealScore.eng} 🏴‍☠️`;
+    $('reveal-score').textContent = `🇪🇸 ${revealScore.esp} – ${revealScore.arg} 🇦🇷`;
     $('reveal-step-pin').hidden = true;
     $('reveal-step-confirm').hidden = false;
     btn.disabled = false; btn.textContent = 'Revelar para todos';
